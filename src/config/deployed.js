@@ -1,15 +1,21 @@
 /** Social */
 export const UNITORCH_TWITTER_URL = 'https://x.com/Unitorch_v4';
 
-/** Shown in the CA strip until VITE_CA_LIVE=true and VITE_UNITORCH is set. */
-export const UNITORCH_CA_DISPLAY = 'TBA';
+/** Ethereum mainnet UniTorch ERC-20 */
+export const UNITORCH_CA = '0x972de87772867c4ec3d25d8D53dbDDC82f36C18d';
+
+export const UNITORCH_CA_DISPLAY = UNITORCH_CA;
+
+/** Hook address — populated from on-chain `hook()` when live data is enabled. */
 export const UNITORCH_HOOK_CA_DISPLAY = 'TBA';
 
-/** Gate on-chain reads + live CA — keep false until mainnet launch. */
-export const IS_CA_LIVE = import.meta.env.VITE_CA_LIVE === 'true';
+/** Gate on-chain reads + live CA strip. Set VITE_CA_LIVE=false to force placeholder mode. */
+export const IS_CA_LIVE = import.meta.env.VITE_CA_LIVE !== 'false';
+
+export const UNITORCH_EXPLORER_URL = `https://etherscan.io/address/${UNITORCH_CA}`;
 
 /** Genesis supply minted at deploy — read live via INITIAL_SUPPLY when possible. */
 export const UNITORCH_INITIAL_SUPPLY = 137_000;
 
 export const UNISWAP_BUY_URL =
-  'https://app.uniswap.org/swap?chain=mainnet&inputCurrency=ETH';
+  `https://app.uniswap.org/swap?chain=mainnet&inputCurrency=ETH&outputCurrency=${UNITORCH_CA}`;

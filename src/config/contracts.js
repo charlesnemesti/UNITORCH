@@ -1,5 +1,5 @@
 import { isAddress, zeroAddress } from 'viem';
-import { IS_CA_LIVE } from './deployed.js';
+import { IS_CA_LIVE, UNITORCH_CA } from './deployed.js';
 
 const zero = zeroAddress;
 
@@ -9,7 +9,7 @@ function parseAddress(value, fallback = zero) {
 }
 
 const legacyEnv = import.meta.env.VITE_UNIHASH;
-const configured = parseAddress(import.meta.env.VITE_UNITORCH ?? legacyEnv, zero);
+const configured = parseAddress(import.meta.env.VITE_UNITORCH ?? legacyEnv ?? UNITORCH_CA, zero);
 const unitorch = IS_CA_LIVE ? configured : zero;
 
 export const CONTRACTS = {

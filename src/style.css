@@ -824,11 +824,32 @@
     line-height: 0.95;
     letter-spacing: 0.06em;
     text-transform: uppercase;
+  }
+
+  .hero-title-uni {
     color: var(--white);
+    text-shadow:
+      0 0 24px color-mix(in srgb, var(--white) 50%, transparent),
+      0 0 48px color-mix(in srgb, var(--white) 22%, transparent),
+      0 2px 0 var(--void);
+  }
+
+  .hero-title-uni .hero-typewriter-ghost {
+    color: color-mix(in srgb, var(--white) 65%, var(--heat));
+    opacity: 0.55;
+  }
+
+  .hero-title-torch {
+    color: var(--fluor);
     text-shadow:
       0 0 24px color-mix(in srgb, var(--fluor) 55%, transparent),
       0 0 48px color-mix(in srgb, var(--fluor) 25%, transparent),
       0 2px 0 var(--void);
+  }
+
+  .hero-title-torch .hero-typewriter-ghost {
+    color: color-mix(in srgb, var(--fluor) 70%, var(--heat));
+    opacity: 0.55;
   }
 
   .hero-title-typewriter {
@@ -839,8 +860,6 @@
     line-height: inherit;
     letter-spacing: inherit;
     text-transform: inherit;
-    color: inherit;
-    text-shadow: inherit;
   }
 
   .hero-title-typewriter .hero-typewriter-cursor {

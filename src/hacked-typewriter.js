@@ -43,6 +43,7 @@ function resolveTypewriterTiming(text, cycleMs, options = {}) {
  *   cycleMs?: number | null,
  *   holdRatio?: number,
  *   cursorChar?: string,
+ *   segmentClass?: (index: number) => string | null,
  * }} [options]
  */
 export function createHackedTypewriter(element, options = {}) {
@@ -83,6 +84,12 @@ export function createHackedTypewriter(element, options = {}) {
     return pool[Math.floor(Math.random() * pool.length)];
   };
 
+  const wrapSegment = (index, inner) => {
+    const segmentClass = config.segmentClass?.(index);
+    if (!segmentClass) return inner;
+    return `<span class="${segmentClass}">${inner}</span>`;
+  };
+
   const buildFrame = () => {
     if (phase === 'clear') return '';
 
@@ -97,11 +104,14 @@ export function createHackedTypewriter(element, options = {}) {
       }
 
       if (i < revealedIndex) {
-        output += escapeHtml(char);
+        output += wrapSegment(i, escapeHtml(char));
       } else if (i === revealedIndex && phase === 'decode') {
-        output += escapeHtml(randomGlyph());
+        output += wrapSegment(i, escapeHtml(randomGlyph()));
       } else if (i === revealedIndex + 1 && phase === 'decode') {
-        output += `<span class="hero-typewriter-ghost">${escapeHtml(randomGlyph())}</span>`;
+        output += wrapSegment(
+          i,
+          `<span class="hero-typewriter-ghost">${escapeHtml(randomGlyph())}</span>`,
+        );
       }
     }
 
@@ -193,3 +203,9 @@ function escapeHtml(char) {
 
 export const HERO_TYPEWRITER_TEXT = '> every swap feeds the burn';
 export const HERO_TITLE_TEXT = 'UniTorch';
+export const HERO_TITLE_UNI_LEN = 3;
+
+/** @param {number} index */
+export function heroTitleSegmentClass(index) {
+  return index < HERO_TITLE_UNI_LEN ? 'hero-title-uni' : 'hero-title-torch';
+}

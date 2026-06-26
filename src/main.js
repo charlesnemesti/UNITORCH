@@ -1,5 +1,5 @@
 import './style.css';
-import { createHackedTypewriter, HERO_TITLE_TEXT, HERO_TYPEWRITER_TEXT } from './hacked-typewriter.js';
+import { createHackedTypewriter, HERO_TITLE_TEXT, HERO_TYPEWRITER_TEXT, heroTitleSegmentClass } from './hacked-typewriter.js';
 import { liveDataEnabled, LAUNCH_TERMINAL_MESSAGE } from './config/launch.js';
 import { initLaunchHeroStats } from './launch-terminal-stats.js';
 import { initCaStrip } from './ca-strip.js';
@@ -41,7 +41,8 @@ function initHeroTitleTypewriter() {
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reducedMotion) {
-    element.textContent = HERO_TITLE_TEXT;
+    element.innerHTML =
+      '<span class="hero-title-uni">Uni</span><span class="hero-title-torch">Torch</span>';
     return;
   }
 
@@ -51,6 +52,7 @@ function initHeroTitleTypewriter() {
     cycleMs: 5000,
     scrambleTicks: 5,
     cursorChar: '█',
+    segmentClass: heroTitleSegmentClass,
   });
   heroTitleTypewriter.start();
 }
@@ -234,7 +236,7 @@ function updateHolderProgressUI() {
     } else if (liveDataEnabled) {
       holderEligibilityCopy.textContent = `${formatNumber(state.holdRemaining)} UNITORCH until Torch NFT eligibility.`;
     } else {
-      holderEligibilityCopy.textContent = `Hold ${HOLDER_THRESHOLD_LABEL} UNITORCH to unlock Torch NFT minting after launch.`;
+      holderEligibilityCopy.textContent = `Hold ${HOLDER_THRESHOLD_LABEL} UNITORCH to unlock Torch NFT minting.`;
     }
   }
 }
@@ -295,7 +297,7 @@ function updateUI() {
       statBurned.textContent = '·';
       if (statTorchNft) statTorchNft.textContent = '·';
       if (statClaimableFees) statClaimableFees.textContent = '·';
-      walletStatus.textContent = 'Ready after launch';
+      walletStatus.textContent = 'Connected';
     }
 
     walletStatus.className = 'text-fluor';
@@ -497,8 +499,28 @@ function initBuyLinks() {
     link.rel = 'noopener noreferrer';
   });
 
+  void wireHookExplorerLink();
+}
+
+async function wireHookExplorerLink() {
   const hookLink = $('hook-explorer-link');
-  if (hookLink) {
+  if (!hookLink) return;
+
+  if (!contractsConfigured() || !liveDataEnabled) {
+    hookLink.href = '#';
+    hookLink.classList.add('is-disabled');
+    hookLink.setAttribute('aria-disabled', 'true');
+    return;
+  }
+
+  try {
+    const meta = await readTokenMetadata();
+    if (!meta?.hook) return;
+
+    hookLink.href = `https://etherscan.io/address/${meta.hook}`;
+    hookLink.classList.remove('is-disabled');
+    hookLink.removeAttribute('aria-disabled');
+  } catch {
     hookLink.href = '#';
     hookLink.classList.add('is-disabled');
     hookLink.setAttribute('aria-disabled', 'true');

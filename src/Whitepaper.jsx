@@ -280,8 +280,8 @@ export default function Whitepaper() {
 
             <DocCard id="signal-001" badge="// 01 · the token" title="The token">
               <p className="text-sm leading-relaxed text-zinc-400">
-                The token contract will be published at launch — currently{' '}
-                <Accent>{UNITORCH_CA_DISPLAY}</Accent>. It is a minimal
+                The deployed token contract is{' '}
+                <Accent>{UNITORCH_CA_DISPLAY}</Accent> on Ethereum mainnet. It is a minimal
                 OpenZeppelin-style ERC-20 with two extensions: a public <Accent>INITIAL_SUPPLY</Accent>{' '}
                 constant and a hook-gated <Accent>burn(uint256)</Accent> function. Transfers, approvals, and
                 balances behave exactly like any other ERC-20 — no rebases, no hidden transfer taxes.
@@ -411,8 +411,7 @@ Uniswap               ${UNISWAP_BUY_URL}`}</CodeBlock>
                 <Accent>totalSupply</Accent> falls on every swap.
               </p>
               <p className="mt-6 border-t border-zinc-800 pt-6 text-xs leading-relaxed text-zinc-500">
-                Pre-launch technical specification — not
-                financial or legal advice.
+                Technical specification — not financial or legal advice.
               </p>
               <div className="mt-6 flex flex-wrap gap-4">
                 <a
