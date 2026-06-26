@@ -1,5 +1,5 @@
 import './style.css';
-import { createHackedTypewriter, HERO_TYPEWRITER_TEXT } from './hacked-typewriter.js';
+import { createHackedTypewriter, HERO_TITLE_TEXT, HERO_TYPEWRITER_TEXT } from './hacked-typewriter.js';
 import { liveDataEnabled, LAUNCH_TERMINAL_MESSAGE } from './config/launch.js';
 import { initLaunchHeroStats } from './launch-terminal-stats.js';
 import { initCaStrip } from './ca-strip.js';
@@ -31,6 +31,34 @@ import { HOLDER_THRESHOLD, HOLDER_THRESHOLD_LABEL } from './config/holder.js';
 
 /** @type {ReturnType<typeof createHackedTypewriter> | null} */
 let heroTypewriter = null;
+
+/** @type {ReturnType<typeof createHackedTypewriter> | null} */
+let heroTitleTypewriter = null;
+
+function initHeroTitleTypewriter() {
+  const element = document.getElementById('hero-title-typewriter');
+  if (!element) return;
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion) {
+    element.textContent = HERO_TITLE_TEXT;
+    return;
+  }
+
+  heroTitleTypewriter?.dispose();
+  heroTitleTypewriter = createHackedTypewriter(element, {
+    text: HERO_TITLE_TEXT,
+    cycleMs: 5000,
+    scrambleTicks: 5,
+    cursorChar: '█',
+  });
+  heroTitleTypewriter.start();
+}
+
+function disposeHeroTitleTypewriter() {
+  heroTitleTypewriter?.dispose();
+  heroTitleTypewriter = null;
+}
 
 function initHeroTypewriter() {
   const element = document.getElementById('hero-typewriter');
@@ -618,6 +646,7 @@ function initWeb3UI() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 initTorchFireHero();
+initHeroTitleTypewriter();
 initHeroTypewriter();
 initCaStrip();
 initWeb3UI();
@@ -626,6 +655,7 @@ initWeb3UI();
 if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     disposeTorchFireHero();
+    disposeHeroTitleTypewriter();
     disposeHeroTypewriter();
   });
 }

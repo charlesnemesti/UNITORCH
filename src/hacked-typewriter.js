@@ -192,3 +192,4 @@ function escapeHtml(char) {
 }
 
 export const HERO_TYPEWRITER_TEXT = '> every swap feeds the burn';
+export const HERO_TITLE_TEXT = 'UniTorch';

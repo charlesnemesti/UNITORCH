@@ -831,6 +831,25 @@
       0 2px 0 var(--void);
   }
 
+  .hero-title-typewriter {
+    display: inline-block;
+    min-width: 2ch;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: inherit;
+    text-shadow: inherit;
+  }
+
+  .hero-title-typewriter .hero-typewriter-cursor {
+    color: var(--fluor);
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--fluor) 80%, transparent),
+      0 0 22px color-mix(in srgb, var(--fluor) 45%, transparent);
+  }
+
   .hero-typewriter-sub {
     margin: 0;
     min-height: 1.35rem;
@@ -929,7 +948,8 @@
 
   @media (prefers-reduced-motion: reduce) {
     .btn-gallery-cta,
-    .btn-gallery-cta-glow {
+    .btn-gallery-cta-glow,
+    .hero-typewriter-cursor {
       animation: none;
     }
   }
