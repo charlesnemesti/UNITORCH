@@ -8,9 +8,8 @@ function parseAddress(value, fallback = zero) {
   return value;
 }
 
-const legacyEnv = import.meta.env.VITE_UNIHASH;
-const configured = parseAddress(import.meta.env.VITE_UNITORCH ?? legacyEnv ?? UNITORCH_CA, zero);
-const unitorch = IS_CA_LIVE ? configured : zero;
+/** Canonical mainnet token — always from deployed.js, never env overrides. */
+const unitorch = IS_CA_LIVE ? parseAddress(UNITORCH_CA, zero) : zero;
 
 export const CONTRACTS = {
   unitorch,

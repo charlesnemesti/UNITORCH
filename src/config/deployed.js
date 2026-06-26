@@ -2,7 +2,7 @@
 export const UNITORCH_TWITTER_URL = 'https://x.com/Unitorch_v4';
 
 /** Ethereum mainnet UniTorch ERC-20 */
-export const UNITORCH_CA = '0x972de87772867c4ec3d25d8D53dbDDC82f36C18d';
+export const UNITORCH_CA = '0x8dd2Fb6dDD02C9AA09D6964AaA9f5956a90e58A3';
 
 export const UNITORCH_CA_DISPLAY = UNITORCH_CA;
 

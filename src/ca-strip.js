@@ -1,5 +1,5 @@
-import { UNITORCH_CA_DISPLAY, UNITORCH_TWITTER_URL, IS_CA_LIVE } from './config/deployed.js';
-import { CONTRACTS, isDeployed } from './config/contracts.js';
+import { UNITORCH_CA, UNITORCH_CA_DISPLAY, UNITORCH_TWITTER_URL, IS_CA_LIVE } from './config/deployed.js';
+import { isDeployed } from './config/contracts.js';
 
 const SCRAMBLE_GLYPHS = '01█#?_X';
 
@@ -42,12 +42,11 @@ function revealTerminalText(element, target) {
 }
 
 function getTokenCaLabel() {
-  if (!IS_CA_LIVE || !isDeployed(CONTRACTS.unitorch)) return UNITORCH_CA_DISPLAY;
-  return CONTRACTS.unitorch;
+  return UNITORCH_CA_DISPLAY;
 }
 
 function isCaStripLive() {
-  return IS_CA_LIVE && isDeployed(CONTRACTS.unitorch);
+  return IS_CA_LIVE && isDeployed(UNITORCH_CA);
 }
 
 export function initCaStrip() {
@@ -74,7 +73,7 @@ export function initCaStrip() {
 
   if (explorerLink) {
     if (live) {
-      explorerLink.href = `https://etherscan.io/address/${CONTRACTS.unitorch}`;
+      explorerLink.href = `https://etherscan.io/address/${UNITORCH_CA}`;
       explorerLink.removeAttribute('aria-disabled');
     } else {
       explorerLink.href = '#';
@@ -87,7 +86,7 @@ export function initCaStrip() {
     if (!live) return;
 
     try {
-      await navigator.clipboard.writeText(CONTRACTS.unitorch);
+      await navigator.clipboard.writeText(UNITORCH_CA);
       copyBtn.textContent = 'Copied ✓';
       copyBtn.classList.add('is-copied');
       strip.classList.add('is-copied');
