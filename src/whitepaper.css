@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Docs page — isolated from landing styles to avoid HMR / bundle coupling */
+@layer base {
+  html {
+    @apply bg-zinc-950 text-zinc-300;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply min-h-screen bg-zinc-950 font-mono antialiased;
+  }
+
+  ::selection {
+    background-color: #dfff00;
+    color: #000000;
+  }
+}
+
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.site-logo-mark {
+  flex-shrink: 0;
+}
+
+.site-logo-text {
+  font-family: VT323, monospace;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+}
+
+@media (min-width: 768px) {
+  .site-logo-text {
+    font-size: 1.875rem;
+  }
+}
+
+.btn-twitter {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid rgb(63 63 70);
+  background: #09090b;
+  color: #d4d4d8;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.btn-twitter:hover {
+  border-color: #dfff00;
+  color: #dfff00;
+  box-shadow: 0 0 14px color-mix(in srgb, #dfff00 50%, transparent);
+}
+
+.ca-strip {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid color-mix(in srgb, #dfff00 22%, transparent);
+  background: linear-gradient(
+    90deg,
+    rgb(9 9 11 / 0.98) 0%,
+    color-mix(in srgb, #dfff00 6%, rgb(9 9 11 / 0.95)) 50%,
+    rgb(9 9 11 / 0.98) 100%
+  );
+}
+
+.ca-strip-glow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    color-mix(in srgb, #dfff00 12%, transparent) 45%,
+    transparent 70%
+  );
+  animation: ca-strip-sweep 4.5s ease-in-out infinite;
+}
+
+.ca-strip.is-copied {
+  border-top-color: #dfff00;
+  box-shadow: 0 0 18px color-mix(in srgb, #dfff00 35%, transparent);
+}
+
+.ca-strip-label {
+  margin: 0 0 0.2rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #dfff00 70%, #ffffff);
+}
+
+.ca-strip-address {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: clamp(0.62rem, 2.2vw, 0.78rem);
+  letter-spacing: 0.06em;
+  color: #ffffff;
+}
+
+.ca-strip-address.is-revealed {
+  color: #dfff00;
+  text-shadow: 0 0 12px color-mix(in srgb, #dfff00 45%, transparent);
+}
+
+.ca-strip-link {
+  border: 1px solid rgb(63 63 70);
+  background: transparent;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #d4d4d8;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.ca-strip-link:hover {
+  border-color: #dfff00;
+  color: #dfff00;
+}
+
+.ca-copy-btn {
+  border: 1px solid #dfff00;
+  background: color-mix(in srgb, #dfff00 12%, transparent);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #dfff00;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+
+.ca-copy-btn:hover {
+  background: color-mix(in srgb, #dfff00 22%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, #dfff00 40%, transparent);
+}
+
+.ca-copy-btn.is-copied {
+  background: #dfff00;
+  color: #000000;
+}
+
+@keyframes ca-strip-sweep {
+  0%,
+  100% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  45% {
+    opacity: 1;
+  }
+  55% {
+    transform: translateX(120%);
+    opacity: 1;
+  }
+  70% {
+    opacity: 0;
+  }
+}

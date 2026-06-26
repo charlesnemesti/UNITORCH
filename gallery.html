@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="UniTorch Gallery — explore 100% on-chain 24×24 Hash SVGs in an interactive 3D grid."
+    />
+    <title>UniTorch Gallery · UNIHASH</title>
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body class="gallery-page">
+    <div class="gallery-top-shell">
+    <header class="gallery-header">
+      <a href="/" class="gallery-header-brand">
+        <img src="/logo.svg" alt="" width="32" height="32" aria-hidden="true" />
+        <p class="gallery-header-title">UniTorch Gallery</p>
+      </a>
+      <nav class="gallery-header-nav" aria-label="Gallery navigation">
+        <a href="/">Home</a>
+        <a href="/#wallet">Wallet</a>
+        <a href="/whitepaper.html">Whitepaper</a>
+        <a
+          href="https://x.com/UniTorch_"
+          class="btn-twitter"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Follow UniTorch on X"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+      </nav>
+    </header>
+
+    <div class="ca-strip" id="ca-strip" aria-label="Token contract address">
+      <div class="ca-strip-glow" aria-hidden="true"></div>
+      <div class="ca-strip-inner">
+        <div class="ca-strip-meta">
+          <p class="ca-strip-label">&gt; contract_address · UNIHASH</p>
+          <code class="ca-strip-address" id="ca-address-display" title="UniTorch token contract"></code>
+        </div>
+        <div class="ca-strip-actions">
+          <a id="ca-explorer-link" href="#" class="ca-strip-link" target="_blank" rel="noopener noreferrer">
+            Etherscan ↗
+          </a>
+          <button type="button" class="ca-copy-btn" id="ca-copy-btn">Copy CA</button>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="gallery-intro">
+      <p class="gallery-intro-label">Gallery</p>
+      <h1 class="gallery-intro-title">On-chain SVG grid</h1>
+      <p class="gallery-intro-copy" id="gallery-intro-copy">
+        120 preview Hashes rendered as living 24×24 SVG art. Drag to explore, then switch layouts below.
+      </p>
+      <p class="gallery-intro-note" id="gallery-intro-note">
+        Preview mode — live on-chain data unlocks after launch.
+      </p>
+    </div>
+
+    <div class="gallery-showcase" aria-live="polite">
+      <p class="gallery-showcase-label" id="gallery-showcase-label">Preview pattern</p>
+      <div class="gallery-showcase-frame" id="gallery-showcase-frame">
+        <svg id="gallery-showcase-svg" viewBox="0 0 24 24" role="img" aria-label="Animated Hash pattern preview"></svg>
+      </div>
+
+      <dl class="gallery-showcase-details" id="gallery-showcase-details">
+        <div class="gallery-showcase-detail">
+          <dt>Hash ID</dt>
+          <dd id="gallery-showcase-hashid">#0000</dd>
+        </div>
+        <div class="gallery-showcase-detail">
+          <dt>Owner wallet</dt>
+          <dd id="gallery-showcase-owner">0x0000…0000</dd>
+        </div>
+        <div class="gallery-showcase-detail">
+          <dt>Daily yield</dt>
+          <dd id="gallery-showcase-yield">~0.000 UNIHASH / day</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div id="gallery-container" aria-label="Interactive Hash gallery"></div>
+
+    <div id="gallery-menu" aria-label="Gallery layouts">
+      <button id="layout-table" type="button">Table</button>
+      <button id="layout-sphere" type="button">Sphere</button>
+      <button id="layout-helix" type="button">Helix</button>
+      <button id="layout-grid" type="button">Grid</button>
+    </div>
+
+    <script type="module" src="/src/gallery-main.js"></script>
+  </body>
+</html>
