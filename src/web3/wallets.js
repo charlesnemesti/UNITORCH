@@ -1,7 +1,7 @@
 /** @typedef {{ uuid: string, name: string, icon: string, rdns: string }} EIP6963Info */
 /** @typedef {{ info: EIP6963Info, provider: import('viem').EIP1193Provider }} EIP6963Detail */
 
-export const WALLET_STORAGE_KEY = 'unihash_wallet_rdns';
+export const WALLET_STORAGE_KEY = 'unitorch_wallet_rdns';
 
 /** Popular wallets shown in the connect modal (order matters). */
 export const POPULAR_WALLETS = [
@@ -119,7 +119,7 @@ export async function getWalletOptions() {
             name: 'Browser wallet',
             rdns: 'injected',
             installUrl: '',
-            accent: '#DFFF00',
+            accent: '#FF6B00',
             icon: null,
             installed: true,
             provider: window.ethereum,

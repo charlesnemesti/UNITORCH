@@ -24,4 +24,18 @@ export const hashRegistryAbi = [
     inputs: [{ name: 'tokenId', type: 'uint256' }],
     outputs: [{ name: '', type: 'string' }],
   },
+  {
+    type: 'function',
+    name: 'claim',
+    stateMutability: 'nonpayable',
+    inputs: [],
+    outputs: [{ name: 'tokenId', type: 'uint256' }],
+  },
+  {
+    type: 'function',
+    name: 'hasClaimed',
+    stateMutability: 'view',
+    inputs: [{ name: 'account', type: 'address' }],
+    outputs: [{ name: '', type: 'bool' }],
+  },
 ];

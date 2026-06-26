@@ -1,9 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=VT323&display=swap');
 
 :root {
-  --fluor: #dfff00;
-  --void: #000000;
-  --white: #ffffff;
+  --ember: #ff6b00;
+  --flame: #ff4500;
+  --heat: #ffb020;
+  --void: #080402;
+  --white: #fff5eb;
+  --fluor: var(--ember);
 }
 
 * {
@@ -230,13 +233,117 @@ body {
   }
 }
 
+#gallery-fire-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  pointer-events: none;
+  overflow: hidden;
+  background: var(--void);
+}
+
+#gallery-fire-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+.gallery-fire-canvas--static {
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 72%, rgb(255 69 0 / 0.22) 0%, transparent 58%),
+    radial-gradient(ellipse 90% 70% at 50% 100%, rgb(255 107 0 / 0.14) 0%, transparent 50%),
+    var(--void);
+}
+
+.gallery-fire-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 95% 80% at 50% 45%, transparent 0%, rgb(8 4 2 / 0.08) 55%, rgb(8 4 2 / 0.28) 100%),
+    linear-gradient(180deg, rgb(8 4 2 / 0.2) 0%, transparent 12%, transparent 82%, rgb(8 4 2 / 0.35) 100%);
+}
+
 #gallery-container {
   position: fixed;
   inset: 0;
+  z-index: 1;
+}
+
+#gallery-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 85% 70% at 50% 45%, transparent 40%, rgb(0 0 0 / 0.42) 100%),
+    linear-gradient(180deg, rgb(255 107 0 / 0.05) 0%, transparent 28%, rgb(0 0 0 / 0.22) 100%);
 }
 
 #gallery-container canvas {
-  display: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.gallery-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: rgb(8 4 2 / 0.92);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
+.gallery-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.gallery-loader-title {
+  margin: 0;
+  font-family: VT323, monospace;
+  font-size: 1.5rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fluor);
+}
+
+.gallery-loader-text {
+  margin: 0;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--white) 75%, transparent);
+}
+
+.gallery-loader-track {
+  width: min(18rem, 70vw);
+  height: 0.35rem;
+  margin-top: 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--fluor) 25%, transparent);
+  background: rgb(0 0 0 / 0.5);
+  overflow: hidden;
+}
+
+.gallery-loader-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--flame), var(--ember));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--ember) 50%, transparent);
+  transition: width 0.2s ease;
 }
 
 .gallery-intro {
@@ -278,6 +385,25 @@ body {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--fluor);
+}
+
+.gallery-holder-cta {
+  display: inline-flex;
+  margin-top: 1.25rem;
+  border: 1px solid var(--fluor);
+  background: color-mix(in srgb, var(--fluor) 12%, transparent);
+  padding: 0.55rem 0.9rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--fluor);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.gallery-holder-cta:hover {
+  background: color-mix(in srgb, var(--fluor) 22%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--fluor) 35%, transparent);
 }
 
 .gallery-showcase {
@@ -401,108 +527,32 @@ body {
   }
 }
 
-#gallery-menu {
+.gallery-flight-hint {
   position: fixed;
-  bottom: 1.5rem;
+  bottom: 1.25rem;
   left: 50%;
   z-index: 20;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  width: min(100% - 2rem, 40rem);
-  transform: translateX(-50%);
-}
-
-#gallery-menu button {
-  border: 1px solid color-mix(in srgb, var(--fluor) 55%, transparent);
-  background: rgb(0 0 0 / 0.72);
-  color: var(--fluor);
-  padding: 0.55rem 0.9rem;
-  font-family: inherit;
-  font-size: 0.68rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-}
-
-#gallery-menu button:hover {
-  background: color-mix(in srgb, var(--fluor) 18%, black);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--fluor) 35%, transparent);
-}
-
-#gallery-menu button:active,
-#gallery-menu button.is-active {
-  color: var(--void);
-  background: var(--fluor);
-  box-shadow: 0 0 20px color-mix(in srgb, var(--fluor) 45%, transparent);
-}
-
-#gallery-menu button.is-active:hover {
-  color: var(--void);
-  background: var(--fluor);
-}
-
-.hash-element {
-  position: relative;
-  width: 128px;
-  height: 128px;
-  border: 1px solid color-mix(in srgb, var(--fluor) 28%, transparent);
-  background: rgb(0 0 0 / 0.92);
-  box-shadow: 0 0 16px color-mix(in srgb, var(--fluor) 12%, transparent);
-  cursor: default;
-  user-select: none;
-}
-
-.hash-element:hover {
-  border-color: var(--fluor);
-  box-shadow: 0 0 22px color-mix(in srgb, var(--fluor) 45%, transparent);
-}
-
-.hash-element-active {
-  border-color: var(--fluor);
-  box-shadow:
-    0 0 28px color-mix(in srgb, var(--fluor) 55%, transparent),
-    0 0 48px color-mix(in srgb, var(--fluor) 22%, transparent);
-}
-
-.hash-element-number {
-  position: absolute;
-  top: 0.45rem;
-  right: 0.5rem;
-  margin: 0;
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
-  color: color-mix(in srgb, var(--fluor) 80%, white);
-}
-
-.hash-element-art {
-  display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 1.35rem 0.85rem 1.1rem;
-}
-
-.hash-element-art svg {
-  width: 72px;
-  height: 72px;
-  display: block;
-}
-
-.hash-element-label {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.45rem;
+  gap: 0.35rem 0.65rem;
   margin: 0;
-  text-align: center;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--fluor) 28%, transparent);
+  background: rgb(8 4 2 / 0.82);
+  backdrop-filter: blur(8px);
   font-size: 0.58rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.72);
+  color: color-mix(in srgb, var(--white) 70%, transparent);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.gallery-flight-hint span:nth-child(odd) {
+  color: var(--fluor);
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
@@ -525,10 +575,6 @@ body {
 }
 
 #gallery-container.is-empty {
-  display: none;
-}
-
-#gallery-menu.is-hidden {
   display: none;
 }
 

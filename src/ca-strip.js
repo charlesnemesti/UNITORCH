@@ -1,4 +1,4 @@
-import { ETHERSCAN_TOKEN_URL, UNIHASH_CA } from './config/deployed.js';
+import { ETHERSCAN_TOKEN_URL, UNITORCH_CA } from './config/deployed.js';
 
 const SCRAMBLE_GLYPHS = '01█#?_X';
 
@@ -51,7 +51,7 @@ export function initCaStrip() {
   strip.dataset.initialized = 'true';
 
   display.textContent = '0x' + '█'.repeat(40);
-  revealTerminalText(display, UNIHASH_CA);
+  revealTerminalText(display, UNITORCH_CA);
 
   if (explorerLink) {
     explorerLink.href = ETHERSCAN_TOKEN_URL;
@@ -59,7 +59,7 @@ export function initCaStrip() {
 
   copyBtn?.addEventListener('click', async () => {
     try {
-      await navigator.clipboard.writeText(UNIHASH_CA);
+      await navigator.clipboard.writeText(UNITORCH_CA);
       copyBtn.textContent = 'Copied ✓';
       copyBtn.classList.add('is-copied');
       strip.classList.add('is-copied');

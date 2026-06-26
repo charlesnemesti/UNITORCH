@@ -2,11 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Paleta fija: negro / blanco / amarillo fluor ── */
+/* ── Paleta fuego: void / ember / flame / heat ── */
 :root {
-  --fluor: #dfff00;
-  --void: #000000;
-  --white: #ffffff;
+  --void: #080402;
+  --ember: #ff6b00;
+  --flame: #ff4500;
+  --heat: #ffb020;
+  --white: #fff5eb;
+  --fluor: var(--ember);
 }
 
 @layer base {
@@ -322,6 +325,58 @@
     color: var(--fluor);
   }
 
+  .holder-progress-block {
+    border: 1px solid color-mix(in srgb, var(--fluor) 28%, transparent);
+    background: color-mix(in srgb, var(--void) 88%, var(--ember) 12%);
+    padding: 1rem 1.1rem;
+  }
+
+  .holder-progress-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .holder-progress-track {
+    height: 0.45rem;
+    overflow: hidden;
+    background: rgb(0 0 0 / 0.55);
+    border: 1px solid color-mix(in srgb, var(--fluor) 18%, transparent);
+  }
+
+  .holder-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--flame), var(--ember), var(--heat));
+    box-shadow: 0 0 12px color-mix(in srgb, var(--ember) 55%, transparent);
+    transition: width 0.35s ease;
+  }
+
+  .holder-eligibility-copy {
+    margin: 0.75rem 0 0;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.68rem;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    color: color-mix(in srgb, var(--white) 82%, transparent);
+  }
+
+  .holder-flow-panel {
+    border: 1px solid color-mix(in srgb, var(--fluor) 30%, transparent);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--void) 92%, var(--ember) 8%) 0%,
+      rgb(0 0 0 / 0.92) 100%
+    );
+    padding: 1.5rem 1.75rem;
+  }
+
+  .holder-step-card .step-body a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
   .wallet-dropdown {
     @apply relative inline-flex;
   }
@@ -489,16 +544,15 @@
     height: 100vh;
     height: 100dvh;
     pointer-events: none;
-  }
-
-  .site-bg-canvas--static {
+    overflow: hidden;
     background: var(--void);
   }
 
   .site-bg-canvas canvas {
     display: block;
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
   }
 
   .site-bg-overlay {
@@ -510,12 +564,12 @@
     height: 100dvh;
     pointer-events: none;
     background:
-      radial-gradient(ellipse 100% 90% at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.25) 60%, rgba(0, 0, 0, 0.55) 100%),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, transparent 22%, transparent 78%, rgba(0, 0, 0, 0.65) 100%);
+      radial-gradient(ellipse 95% 80% at 50% 45%, transparent 0%, rgba(8, 4, 2, 0.05) 60%, rgba(8, 4, 2, 0.2) 100%),
+      linear-gradient(to bottom, rgba(8, 4, 2, 0.22) 0%, transparent 10%, transparent 85%, rgba(8, 4, 2, 0.32) 100%);
   }
 
   .site-header-glass {
-    background: rgb(0 0 0 / 0.72);
+    background: rgb(8 4 2 / 0.32);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
@@ -647,7 +701,7 @@
   }
 
   .site-footer-glass {
-    background: rgb(0 0 0 / 0.8);
+    background: rgb(8 4 2 / 0.38);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
   }
@@ -692,16 +746,17 @@
     justify-content: center;
     margin: 0 auto 1.5rem;
     max-width: 52rem;
+    pointer-events: none;
   }
 
   .hero-fire-stage {
     position: absolute;
     inset: 0;
     overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--fluor) 18%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ember) 18%, transparent);
     background: radial-gradient(
       ellipse 80% 70% at 50% 85%,
-      color-mix(in srgb, var(--fluor) 8%, transparent) 0%,
+      color-mix(in srgb, var(--ember) 8%, transparent) 0%,
       var(--void) 72%
     );
   }
@@ -709,8 +764,20 @@
   .hero-fire-stage.is-static {
     background: radial-gradient(
       ellipse 70% 60% at 50% 80%,
-      color-mix(in srgb, var(--fluor) 22%, transparent) 0%,
+      color-mix(in srgb, var(--ember) 22%, transparent) 0%,
       var(--void) 70%
+    );
+  }
+
+  .hero-fire-stage.is-hidden {
+    display: none;
+  }
+
+  .site-bg-canvas--static {
+    background: radial-gradient(
+      ellipse 90% 70% at 50% 85%,
+      color-mix(in srgb, var(--ember) 12%, transparent) 0%,
+      var(--void) 65%
     );
   }
 
@@ -730,6 +797,9 @@
     padding: 1rem 1.25rem;
     text-align: center;
     pointer-events: none;
+    text-shadow:
+      0 0 28px rgba(8, 4, 2, 0.55),
+      0 2px 12px rgba(8, 4, 2, 0.45);
   }
 
   .hero-title-main {
@@ -860,7 +930,7 @@
 
   .hero-typewriter-ghost {
     opacity: 0.55;
-    color: color-mix(in srgb, var(--fluor) 70%, #00ffcc);
+    color: color-mix(in srgb, var(--ember) 70%, var(--heat));
   }
 
   .hero-typewriter-cursor {

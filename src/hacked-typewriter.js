@@ -191,4 +191,4 @@ function escapeHtml(char) {
     .replace(/"/g, '&quot;');
 }
 
-export const HERO_TYPEWRITER_TEXT = '> supply only shrinks';
+export const HERO_TYPEWRITER_TEXT = '> every swap feeds the burn';

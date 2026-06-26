@@ -2,7 +2,7 @@ import { createHackedTypewriter } from './hacked-typewriter.js';
 import { LAUNCH_TERMINAL_MESSAGE } from './config/launch.js';
 
 const SCRAMBLE_GLYPHS = '01█#?X_';
-const FAKE_TARGETS = ['1284', '412', '89204'];
+const FAKE_TARGETS = ['4792', '132208', '3.49'];
 
 /**
  * @param {string[]} statIds

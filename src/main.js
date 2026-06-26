@@ -8,7 +8,6 @@ import {
   connect,
   tryAutoConnect,
   refresh,
-  claim,
   disconnect,
   initWalletListeners,
   contractsConfigured,
@@ -19,9 +18,13 @@ import {
   readProtocolStats,
   readTokenMetadata,
   loadSampleHashes,
+  claimTorchNft,
+  claimHookFees,
   UNISWAP_BUY_URL,
-  ETHERSCAN_TOKEN_URL,
+  ETHERSCAN_HOOK_URL,
 } from './web3/index.js';
+import { getHashSvgCatalog } from './hash-svgs.js';
+import { HOLDER_THRESHOLD, HOLDER_THRESHOLD_LABEL } from './config/holder.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HERO — typewriter subtitle (fire lives in torch-fire-hero.js)
@@ -55,11 +58,18 @@ function disposeHeroTypewriter() {
 const state = {
   connected: false,
   address: null,
-  claiming: false,
   refreshing: false,
-  hashBalance: 0,
-  hashesOwned: 0,
+  tokenBalance: 0,
+  supplySharePercent: 0,
+  holdProgress: 0,
+  holdEligible: false,
+  holdRemaining: HOLDER_THRESHOLD,
+  torchTokenId: null,
   claimableEth: 0,
+  canClaimNft: false,
+  canClaimFees: false,
+  nftDeployed: false,
+  distributorDeployed: false,
 };
 
 const $ = (id) => document.getElementById(id);
@@ -70,13 +80,19 @@ const btnConnectWallet = $('btn-connect-wallet');
 const btnConnectWalletLabel = $('btn-connect-wallet-label');
 const walletDropdownHeader = $('wallet-dropdown-header');
 const walletDropdownPanel = $('wallet-dropdown-panel');
-const btnClaim = $('btn-claim');
 const statusText = $('status-text');
 const walletTerminalLine = $('wallet-terminal-line');
 const walletStatus = $('wallet-status');
 const statBalance = $('stat-balance');
-const statOwned = $('stat-owned');
-const statClaimable = $('stat-claimable');
+const statShare = $('stat-share');
+const statBurned = $('stat-burned-wallet');
+const statTorchNft = $('stat-torch-nft');
+const statClaimableFees = $('stat-claimable-fees');
+const statHoldProgressText = $('stat-hold-progress-text');
+const statHoldProgressBar = $('stat-hold-progress-bar');
+const holderEligibilityCopy = $('holder-eligibility-copy');
+const btnClaimTorch = $('btn-claim-torch');
+const btnClaimFees = $('btn-claim-fees');
 
 function formatWalletError(error) {
   const message = error?.shortMessage ?? error?.message ?? 'Connection failed.';
@@ -119,10 +135,28 @@ function formatEth(n) {
   return `${n.toFixed(4)} ETH`;
 }
 
+function formatPercent(n) {
+  if (!Number.isFinite(n) || n <= 0) return '0%';
+  if (n < 0.01) return '<0.01%';
+  return `${n.toFixed(2)}%`;
+}
+
+function applyHolderStatus(holder) {
+  state.tokenBalance = holder.tokenBalance;
+  state.supplySharePercent = holder.supplySharePercent;
+  state.holdProgress = holder.holdProgress;
+  state.holdEligible = holder.holdEligible;
+  state.holdRemaining = holder.holdRemaining;
+  state.torchTokenId = holder.torchTokenId;
+  state.claimableEth = holder.claimableEth;
+  state.canClaimNft = holder.canClaimNft;
+  state.canClaimFees = holder.canClaimFees;
+  state.nftDeployed = holder.nftDeployed;
+  state.distributorDeployed = holder.distributorDeployed;
+}
+
 function applyBalances(balances) {
-  state.hashBalance = balances.hashBalance;
-  state.hashesOwned = balances.hashesOwned;
-  state.claimableEth = balances.claimableEth;
+  applyHolderStatus(balances);
 }
 
 function applyConnection(address, balances) {
@@ -134,9 +168,48 @@ function applyConnection(address, balances) {
 function clearConnection() {
   state.connected = false;
   state.address = null;
-  state.hashBalance = 0;
-  state.hashesOwned = 0;
+  state.tokenBalance = 0;
+  state.supplySharePercent = 0;
+  state.holdProgress = 0;
+  state.holdEligible = false;
+  state.holdRemaining = HOLDER_THRESHOLD;
+  state.torchTokenId = null;
   state.claimableEth = 0;
+  state.canClaimNft = false;
+  state.canClaimFees = false;
+  state.nftDeployed = false;
+  state.distributorDeployed = false;
+}
+
+function updateHolderProgressUI() {
+  const pct = Math.round(state.holdProgress * 100);
+  const held = Math.min(state.tokenBalance, HOLDER_THRESHOLD);
+
+  if (statHoldProgressText) {
+    statHoldProgressText.textContent = liveDataEnabled && state.connected
+      ? `${formatNumber(held)} / ${HOLDER_THRESHOLD_LABEL}`
+      : `0 / ${HOLDER_THRESHOLD_LABEL}`;
+  }
+
+  if (statHoldProgressBar) {
+    statHoldProgressBar.style.width = liveDataEnabled && state.connected ? `${pct}%` : '0%';
+  }
+
+  if (holderEligibilityCopy) {
+    if (!state.connected) {
+      holderEligibilityCopy.textContent = `Hold ${HOLDER_THRESHOLD_LABEL} UNITORCH to unlock Torch NFT minting.`;
+    } else if (state.torchTokenId) {
+      holderEligibilityCopy.textContent = `Torch #${String(state.torchTokenId).padStart(4, '0')} minted — earning hook fees from swaps.`;
+    } else if (state.holdEligible) {
+      holderEligibilityCopy.textContent = state.nftDeployed
+        ? 'Eligible — claim your Torch NFT to start earning hook fees.'
+        : `Eligible on balance — NFT registry wiring pending. You hold ≥ ${HOLDER_THRESHOLD_LABEL} UNITORCH.`;
+    } else if (liveDataEnabled) {
+      holderEligibilityCopy.textContent = `${formatNumber(state.holdRemaining)} UNITORCH until Torch NFT eligibility.`;
+    } else {
+      holderEligibilityCopy.textContent = `Hold ${HOLDER_THRESHOLD_LABEL} UNITORCH to unlock Torch NFT minting after launch.`;
+    }
+  }
 }
 
 /** @type {ReturnType<typeof initWalletDropdown> | null} */
@@ -146,7 +219,7 @@ let headerDropdown = null;
 let panelDropdown = null;
 
 function updateUI() {
-  const busy = state.claiming || state.refreshing;
+  const busy = state.refreshing;
   const connectLabel = state.connected && state.address
     ? truncateAddress(state.address)
     : 'Connect';
@@ -158,21 +231,43 @@ function updateUI() {
 
   btnConnectHeader.disabled = busy;
   btnConnectWallet.disabled = busy;
-  btnClaim.disabled = !state.connected || busy || state.claimableEth <= 0;
+  if (btnClaimTorch) {
+    btnClaimTorch.disabled = busy || !state.connected || Boolean(state.torchTokenId) || !state.holdEligible;
+  }
+  if (btnClaimFees) btnClaimFees.disabled = busy || !state.canClaimFees;
+
+  updateHolderProgressUI();
 
   if (state.connected) {
     walletTerminalLine.textContent = `> connected: ${state.address}`;
     walletTerminalLine.className = 'mb-8 font-mono text-sm text-fluor';
 
     if (liveDataEnabled) {
-      statBalance.textContent = formatNumber(state.hashBalance);
-      statOwned.textContent = String(state.hashesOwned);
-      statClaimable.textContent = formatEth(state.claimableEth);
-      walletStatus.textContent = busy ? 'Processing' : 'Active';
+      statBalance.textContent = formatNumber(state.tokenBalance);
+      statShare.textContent = formatPercent(state.supplySharePercent);
+      statBurned.textContent = '·';
+
+      if (statTorchNft) {
+        statTorchNft.textContent = state.torchTokenId
+          ? `#${String(state.torchTokenId).padStart(4, '0')}`
+          : state.holdEligible
+            ? 'Eligible'
+            : 'Not minted';
+      }
+
+      if (statClaimableFees) {
+        statClaimableFees.textContent = state.distributorDeployed
+          ? formatEth(state.claimableEth)
+          : 'Accruing via hook';
+      }
+
+      walletStatus.textContent = busy ? 'Processing' : state.torchTokenId ? 'Earning fees' : 'Active';
     } else {
       statBalance.textContent = '·';
-      statOwned.textContent = '·';
-      statClaimable.textContent = '·';
+      statShare.textContent = '·';
+      statBurned.textContent = '·';
+      if (statTorchNft) statTorchNft.textContent = '·';
+      if (statClaimableFees) statClaimableFees.textContent = '·';
       walletStatus.textContent = 'Ready after launch';
     }
 
@@ -181,27 +276,74 @@ function updateUI() {
     walletTerminalLine.textContent = '> awaiting connection…';
     walletTerminalLine.className = 'mb-8 font-mono text-sm text-white';
     statBalance.textContent = '·';
-    statOwned.textContent = '·';
-    statClaimable.textContent = '·';
+    statShare.textContent = '·';
+    statBurned.textContent = '·';
+    if (statTorchNft) statTorchNft.textContent = '·';
+    if (statClaimableFees) statClaimableFees.textContent = '·';
     walletStatus.textContent = 'Idle';
     walletStatus.className = 'text-white';
   }
 }
 
 function openConnectModal() {
-  if (state.claiming) return;
+  if (state.refreshing) return;
   closeWalletDropdowns();
   openWalletModal();
 }
 
 function changeWallet() {
-  if (state.claiming) return;
+  if (state.refreshing) return;
   closeWalletDropdowns();
   openWalletModal();
 }
 
+async function handleClaimTorch() {
+  if (!state.connected || state.refreshing || state.torchTokenId || !state.holdEligible) return;
+
+  state.refreshing = true;
+  updateUI();
+  setStatus('Submitting Torch NFT claim…', 'warn');
+
+  try {
+    if (!state.nftDeployed) {
+      throw new Error('Torch NFT registry is not wired yet. Set VITE_TORCH_NFT when the contract deploys.');
+    }
+    await claimTorchNft();
+    const balances = await refresh(state.address);
+    applyConnection(state.address, balances);
+    setStatus('Torch NFT claimed. View it in the gallery.', 'success');
+  } catch (error) {
+    console.error('[UniTorch] Torch claim failed:', error);
+    setStatus(formatWalletError(error), 'error');
+  } finally {
+    state.refreshing = false;
+    updateUI();
+  }
+}
+
+async function handleClaimFees() {
+  if (!state.connected || state.refreshing || !state.canClaimFees) return;
+
+  state.refreshing = true;
+  updateUI();
+  setStatus('Claiming hook fees…', 'warn');
+
+  try {
+    await claimHookFees();
+    const balances = await refresh(state.address);
+    applyConnection(state.address, balances);
+    setStatus('Hook fees claimed to your wallet.', 'success');
+  } catch (error) {
+    console.error('[UniTorch] Fee claim failed:', error);
+    setStatus(formatWalletError(error), 'error');
+  } finally {
+    state.refreshing = false;
+    updateUI();
+  }
+}
+
 async function handleDisconnect() {
-  if (state.claiming) return;
+  if (state.refreshing) return;
 
   disconnect();
   clearConnection();
@@ -222,39 +364,15 @@ async function connectWithProvider(provider, rdns) {
       setStatus('Connected. Set contract addresses in .env to read balances.', 'warn');
     } else if (!liveDataEnabled) {
       setStatus(`Connected. ${LAUNCH_TERMINAL_MESSAGE}.`, 'warn');
-    } else if (balances.claimableEth > 0) {
-      setStatus('Connected. Rewards ready to claim.', 'success');
     } else {
       setStatus('Connected. Wallet synced on-chain.', 'success');
     }
 
     updateUI();
   } catch (error) {
-    console.error('[UniHash] Wallet connection failed:', error);
+    console.error('[UniTorch] Wallet connection failed:', error);
     setStatus(formatWalletError(error), 'error');
     walletStatus.textContent = 'Idle';
-  }
-}
-
-async function claimRewards() {
-  if (!state.connected || state.claiming || state.claimableEth <= 0) return;
-
-  state.claiming = true;
-  updateUI();
-  setStatus('Claiming protocol rewards...', 'warn');
-
-  try {
-    const claimed = state.claimableEth;
-    await claim(state.address);
-    const balances = await refresh(state.address);
-    applyBalances(balances);
-    setStatus(`Claimed ${formatEth(claimed)} from treasury.`, 'success');
-  } catch (error) {
-    console.error('[UniHash] Claim failed:', error);
-    setStatus(error?.shortMessage ?? error?.message ?? 'Claim failed. Retry when ready.', 'error');
-  } finally {
-    state.claiming = false;
-    updateUI();
   }
 }
 
@@ -272,7 +390,7 @@ async function handleAccountChange(address) {
     applyConnection(address, balances);
     setStatus('Account switched. Balances updated.', 'success');
   } catch (error) {
-    console.error('[UniHash] Refresh failed:', error);
+    console.error('[UniTorch] Refresh failed:', error);
     setStatus('Could not refresh balances.', 'error');
   } finally {
     state.refreshing = false;
@@ -290,7 +408,7 @@ async function tryRestoreSession() {
 }
 
 async function initHeroStats() {
-  const ids = ['stat-hashes', 'stat-holders', 'stat-spawned'];
+  const ids = ['stat-burned', 'stat-circulating', 'stat-burn-pct'];
 
   if (!liveDataEnabled) {
     initLaunchHeroStats(ids, 'hero-stats-launch');
@@ -308,11 +426,14 @@ async function initHeroStats() {
     const stats = await readProtocolStats();
     if (!stats) return;
 
-    animateStat('stat-hashes', stats.hashesAlive);
-    animateStat('stat-holders', stats.holders);
-    animateStat('stat-spawned', stats.blocksSpawned);
+    animateStat('stat-burned', Math.floor(stats.tokensBurned));
+    animateStat('stat-circulating', Math.floor(stats.circulatingSupply));
+    const burnPctEl = $('stat-burn-pct');
+    if (burnPctEl) {
+      burnPctEl.textContent = `${stats.burnPercent.toFixed(2)}%`;
+    }
   } catch (error) {
-    console.error('[UniHash] Could not load protocol stats:', error);
+    console.error('[UniTorch] Could not load protocol stats:', error);
     ids.forEach((id) => {
       const el = $(id);
       if (el) el.textContent = '—';
@@ -348,6 +469,23 @@ function initBuyLinks() {
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
   });
+
+  const hookLink = $('hook-explorer-link');
+  if (hookLink) {
+    hookLink.href = ETHERSCAN_HOOK_URL;
+  }
+}
+
+async function initGlobalBurnStat() {
+  const burnedWalletEl = $('stat-burned-wallet');
+  if (!burnedWalletEl || !liveDataEnabled || !contractsConfigured()) return;
+
+  try {
+    const meta = await readTokenMetadata();
+    if (meta) burnedWalletEl.textContent = formatNumber(meta.tokensBurned);
+  } catch {
+    burnedWalletEl.textContent = '—';
+  }
 }
 
 async function initTokenomics() {
@@ -367,9 +505,14 @@ async function initTokenomics() {
     if (!meta) return;
 
     supplyEl.textContent = formatNumber(meta.totalSupply);
-    if (symbolEl) symbolEl.textContent = `$${meta.symbol}`;
+    if (symbolEl) symbolEl.textContent = 'UNITORCH';
+
+    const initialEl = $('token-initial-supply');
+    const burnedEl = $('token-burned');
+    if (initialEl) initialEl.textContent = formatNumber(meta.initialSupply);
+    if (burnedEl) burnedEl.textContent = formatNumber(meta.tokensBurned);
   } catch (error) {
-    console.error('[UniHash] Could not load token metadata:', error);
+    console.error('[UniTorch] Could not load token metadata:', error);
     supplyEl.textContent = '—';
   }
 }
@@ -378,45 +521,52 @@ function renderHashPreview(svgMarkup) {
   return `<svg viewBox="0 0 24 24" class="h-full w-full">${svgMarkup}</svg>`;
 }
 
-async function initLandingOnChainContent() {
-  if (!liveDataEnabled) return;
+function initLandingFlamePatterns() {
+  const patterns = getHashSvgCatalog(12);
 
-  if (!contractsConfigured()) return;
+  const grid = $('landing-gallery-grid');
+  if (grid) {
+    grid.innerHTML = patterns
+      .map((svg, index) => {
+        const hiddenClass =
+          index >= 10 ? ' hidden md:block' : index >= 8 ? ' hidden sm:block' : '';
+        return `<div class="gallery-cell${hiddenClass}" title="#${String(index + 1).padStart(4, '0')}"><svg viewBox="0 0 24 24">${svg}</svg></div>`;
+      })
+      .join('');
+    grid.removeAttribute('aria-busy');
+  }
 
-  try {
-    const samples = await loadSampleHashes(15);
-    if (samples.length === 0) return;
+  const cardsRoot = $('torch-showcase-cards');
+  if (cardsRoot) {
+    const featured = [patterns[0], patterns[7], patterns[11]];
+    const cardClasses = ['hash-card hash-card--live', 'hash-card hash-card--sealed', 'hash-card hash-card--live'];
+    const labels = ['Torch NFT · claimable', 'Hook fees · accruing', 'Hold 200 · eligible'];
 
-    const grid = $('landing-gallery-grid');
-    if (grid) {
-      grid.innerHTML = samples
-        .map(
-          (hash) =>
-            `<div class="gallery-cell" title="${hash.hashId}"><svg viewBox="0 0 24 24">${hash.svg}</svg></div>`,
-        )
-        .join('');
-    }
-
-    const cardsRoot = $('hash-showcase-cards');
-    if (cardsRoot) {
-      const featured = samples.slice(0, 3);
-      const cardClasses = ['hash-card hash-card--live', 'hash-card hash-card--sealed', 'hash-card hash-card--live'];
-
-      cardsRoot.innerHTML = featured
-        .map(
-          (hash, index) => `
+    cardsRoot.innerHTML = featured
+      .map(
+        (svg, index) => `
           <article class="${cardClasses[index] ?? 'hash-card hash-card--live'}">
-            <div class="hash-preview" aria-hidden="true">${renderHashPreview(hash.svg)}</div>
+            <div class="hash-preview${index === 2 ? ' hash-preview--dim' : ''}" aria-hidden="true">${renderHashPreview(svg)}</div>
             <div>
-              <p class="hash-name">hash_${hash.hashId.slice(1)}</p>
-              <p class="hash-status hash-status--active">Live · ${hash.ownerShort}</p>
+              <p class="hash-name">torch_${String(index + 1).padStart(4, '0')}</p>
+              <p class="hash-status hash-status--active">${labels[index] ?? 'Procedural'} · flame pixel art</p>
             </div>
           </article>`,
-        )
-        .join('');
-    }
+      )
+      .join('');
+    cardsRoot.removeAttribute('aria-busy');
+  }
+}
+
+async function initLandingOnChainContent() {
+  initLandingFlamePatterns();
+
+  if (!liveDataEnabled || !contractsConfigured()) return;
+
+  try {
+    await loadSampleHashes(15);
   } catch (error) {
-    console.error('[UniHash] Could not load landing on-chain previews:', error);
+    console.error('[UniTorch] Could not load landing previews:', error);
   }
 }
 
@@ -448,15 +598,16 @@ function initWeb3UI() {
     });
   }
 
-  btnClaim.addEventListener('click', claimRewards);
-
   initWalletModal(connectWithProvider);
   initWalletListeners(handleAccountChange);
+  btnClaimTorch?.addEventListener('click', handleClaimTorch);
+  btnClaimFees?.addEventListener('click', handleClaimFees);
   tryRestoreSession();
 
   initHeroStats();
   initBuyLinks();
   initTokenomics();
+  initGlobalBurnStat();
   initLandingOnChainContent();
   updateUI();
 }

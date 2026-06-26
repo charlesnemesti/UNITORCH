@@ -4,8 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        fluor: '#DFFF00',
-        void: '#000000',
+        fluor: '#FF6B00',
+        ember: '#FF6B00',
+        flame: '#FF4500',
+        heat: '#FFB020',
+        void: '#080402',
       },
       fontFamily: {
         mono: ['"Fira Code"', '"Courier New"', '"Space Mono"', 'monospace'],

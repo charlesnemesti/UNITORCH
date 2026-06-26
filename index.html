@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="UniTorch — Every swap feeds the burn. UNIHASH deflationary token on Ethereum."
+      content="UniTorch — deflationary ERC-20 on Ethereum. Every Uniswap v4 swap burns supply through an on-chain hook."
     />
-    <title>UniTorch · UNIHASH · The burn never stops</title>
+    <title>UniTorch · UNITORCH · The burn never stops</title>
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,31 +19,30 @@
   </head>
 
   <body class="text-white">
-    <!-- Static dark backdrop (fire lives in hero-fire-stage) -->
     <div id="hero-canvas" class="site-bg-canvas site-bg-canvas--static" aria-hidden="true"></div>
     <div class="site-bg-overlay" aria-hidden="true"></div>
 
     <div class="relative z-10 flex min-h-screen flex-col">
 
-      <!-- ═══ HEADER / NAV ═══ -->
       <header class="site-header-glass fixed top-0 left-0 right-0 z-50 border-b border-ui">
         <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4 md:px-10">
           <a href="#" class="site-logo shrink-0">
             <img src="/logo.svg" alt="" width="36" height="36" class="site-logo-mark" aria-hidden="true" />
-            <span class="site-logo-text">UniTorch <span class="text-fluor">UNIHASH</span></span>
+            <span class="site-logo-text">Uni<span class="text-fluor">Torch</span></span>
           </a>
 
           <nav class="hidden items-center gap-6 lg:flex" aria-label="Main navigation">
             <a href="#how-it-works" class="nav-link">How it works</a>
-            <a href="#the-hash" class="nav-link">Hashes</a>
+            <a href="#the-burn" class="nav-link">The burn</a>
             <a href="#tokenomics" class="nav-link">Tokenomics</a>
+            <a href="#holder-rewards" class="nav-link">Holder rewards</a>
             <a href="gallery.html" class="nav-link">Gallery</a>
             <a href="whitepaper.html" class="nav-link">Whitepaper</a>
           </nav>
 
           <div class="flex shrink-0 items-center gap-3">
             <a
-              href="https://x.com/Unihash_"
+              href="https://x.com/UniTorch_"
               class="btn-twitter"
               target="_blank"
               rel="noopener noreferrer"
@@ -53,7 +52,7 @@
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
               </svg>
             </a>
-            <a href="#wallet" class="btn-primary buy-hash-link hidden sm:inline-flex">Buy UNIHASH ↗</a>
+            <a href="#wallet" class="btn-primary buy-hash-link hidden sm:inline-flex">Buy UNITORCH ↗</a>
             <div id="wallet-dropdown-header" class="wallet-dropdown">
               <button
                 id="btn-connect-header"
@@ -79,9 +78,9 @@
         </div>
 
         <nav class="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-ui px-6 py-3 lg:hidden" aria-label="Mobile navigation">
-          <a href="#wallet" class="btn-primary buy-hash-link text-[10px] sm:hidden">Buy UNIHASH ↗</a>
+          <a href="#wallet" class="btn-primary buy-hash-link text-[10px] sm:hidden">Buy UNITORCH ↗</a>
           <a href="#how-it-works" class="nav-link text-xs">How it works</a>
-          <a href="#the-hash" class="nav-link text-xs">Hashes</a>
+          <a href="#the-burn" class="nav-link text-xs">The burn</a>
           <a href="#tokenomics" class="nav-link text-xs">Tokenomics</a>
           <a href="gallery.html" class="nav-link text-xs">Gallery</a>
           <a href="whitepaper.html" class="nav-link text-xs">Whitepaper</a>
@@ -91,17 +90,11 @@
           <div class="ca-strip-glow" aria-hidden="true"></div>
           <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-2.5 md:px-10">
             <div class="ca-strip-meta">
-              <p class="ca-strip-label">&gt; contract_address · UNIHASH</p>
+              <p class="ca-strip-label">&gt; contract_address · UNITORCH</p>
               <code class="ca-strip-address" id="ca-address-display" title="UniTorch token contract"></code>
             </div>
             <div class="ca-strip-actions">
-              <a
-                id="ca-explorer-link"
-                href="#"
-                class="ca-strip-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a id="ca-explorer-link" href="#" class="ca-strip-link" target="_blank" rel="noopener noreferrer">
                 Etherscan ↗
               </a>
               <button type="button" class="ca-copy-btn" id="ca-copy-btn">Copy CA</button>
@@ -112,7 +105,6 @@
 
       <main class="site-main">
 
-        <!-- ═══ HERO LANDING (fullscreen + animation groups) ═══ -->
         <section id="hero" class="hero-landing" aria-labelledby="hero-heading">
           <div class="hero-content mx-auto w-full max-w-6xl px-6 md:px-10">
             <p class="hero-eyebrow">&gt; every swap feeds the burn</p>
@@ -131,16 +123,16 @@
 
             <a href="gallery.html" class="btn-gallery-cta">
               <span class="btn-gallery-cta-glow" aria-hidden="true"></span>
-              <span class="btn-gallery-cta-label">Visit the SVG gallery ↗</span>
+              <span class="btn-gallery-cta-label">Visit the torch gallery ↗</span>
             </a>
           </div>
 
           <div class="hero-bottom">
             <div class="hero-stats font-mono text-xs uppercase tracking-widest text-white">
               <div class="hero-stats-metrics">
-                <span><span class="hero-stat-num" id="stat-hashes">·</span> Hashes alive</span>
-                <span><span class="hero-stat-num" id="stat-holders">·</span> holders</span>
-                <span><span class="hero-stat-num" id="stat-spawned">·</span> blocks spawned</span>
+                <span><span class="hero-stat-num" id="stat-burned">·</span> tokens burned</span>
+                <span><span class="hero-stat-num" id="stat-circulating">·</span> circulating</span>
+                <span><span class="hero-stat-num" id="stat-burn-pct">·</span> supply burned</span>
               </div>
               <p id="hero-stats-launch" class="hero-stats-launch" aria-live="polite"></p>
             </div>
@@ -149,204 +141,226 @@
           </div>
         </section>
 
-        <!-- ═══ HOW IT WORKS ═══ -->
         <section id="how-it-works" class="section-pad border-b border-ui" aria-labelledby="how-heading">
           <div class="mx-auto max-w-6xl px-6 md:px-10">
             <p class="section-label">How it works</p>
             <h2 id="how-heading" class="section-title mb-8">
-              Buy the token and a Hash appears, drawn on-chain
+              Buy the token — every trade shrinks the supply
             </h2>
 
             <p class="body-text mb-16 max-w-3xl md:text-base">
-              You buy UNIHASH on Uniswap the way you would any coin, and once you hold 1 whole token a living
-              Hash NFT mints itself straight to your wallet — 24×24 SVG art and all. Every Hash is drawn by
-              contracts on Ethereum, with no server, no IPFS, and no mint page to visit.
+              UNITORCH is a plain ERC-20 on Ethereum wired to a Uniswap v4 burn hook. You buy on Uniswap
+              like any other token; the hook calls <span class="text-fluor">burn()</span> on each swap so
+              circulating supply only goes down. No mint button, no staking, no off-chain accounting — just
+              verifiable deflation on every trade.
             </p>
 
             <div class="grid gap-8 md:grid-cols-3">
               <article class="step-card">
                 <span class="step-number">01</span>
-                <h3 class="step-title">Buy UNIHASH</h3>
+                <h3 class="step-title">Buy UNITORCH</h3>
                 <p class="step-body">
-                  You swap ETH for UNIHASH on Uniswap the same way you would buy any other coin, with no mint
-                  button and no separate app to deal with.
+                  Swap ETH for UNITORCH on Uniswap. The token contract lives at a single verified address
+                  on Ethereum mainnet — no separate app or mint page.
                 </p>
               </article>
 
               <article class="step-card">
                 <span class="step-number">02</span>
-                <h3 class="step-title">Hold 1, get a Hash</h3>
+                <h3 class="step-title">Hook burns on swap</h3>
                 <p class="step-body">
-                  Hold 1 whole UNIHASH and a living Hash appears in your wallet. Each additional whole token
-                  spawns another. Drop below 1 and the NFT burns automatically.
+                  A Uniswap v4 hook is wired via <span class="text-fluor">setHook</span>. Only that hook
+                  can call burn — each swap removes tokens from circulation permanently.
                 </p>
               </article>
 
               <article class="step-card">
                 <span class="step-number">03</span>
-                <h3 class="step-title">Claim your share</h3>
+                <h3 class="step-title">Supply shrinks forever</h3>
                 <p class="step-body">
-                  Each Hash accrues protocol fees from the 4% swap tax. Rewards build in the background
-                  and you claim them whenever you want — no staking, no lockups.
+                  <span class="text-fluor">totalSupply</span> falls while <span class="text-fluor">INITIAL_SUPPLY</span>
+                  stays fixed on-chain. Anyone can read the gap on Etherscan and watch the burn accumulate.
                 </p>
               </article>
             </div>
           </div>
         </section>
 
-        <!-- ═══ THE HASH ═══ -->
-        <section id="the-hash" class="section-pad border-b border-ui" aria-labelledby="hash-heading">
+        <section id="the-burn" class="section-pad border-b border-ui" aria-labelledby="burn-heading">
           <div class="mx-auto max-w-6xl px-6 md:px-10">
-            <p class="section-label">The Hash</p>
-            <h2 id="hash-heading" class="section-title mb-4">
-              A living NFT, drawn fully on-chain
+            <p class="section-label">The burn</p>
+            <h2 id="burn-heading" class="section-title mb-4">
+              Deflation baked into the contract
             </h2>
             <p class="body-text mb-12 max-w-3xl">
-              Every Hash is drawn by contracts on Ethereum rather than a server, and its look is read from
-              the chain, so it shifts as you hold and seal it. Sealing one locks it for good and preserves
-              the <span class="text-fluor">frozen tokenURI</span> permanently on-chain.
+              The token exposes a public <span class="text-fluor">burn(uint256)</span> entry point restricted
+              to the linked hook. Transfers behave like a normal ERC-20; deflation only fires when the pool
+              routes volume through the hook. Burned tokens are destroyed — not sent to a dead wallet.
             </p>
 
-            <div id="hash-showcase-cards" class="mb-10 grid gap-4 md:grid-cols-3">
-              <article class="hash-card hash-card--live">
-                <div class="hash-preview" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" class="h-full w-full"><rect width="24" height="24" fill="#000"/><rect x="4" y="4" width="4" height="4" fill="#DFFF00"/><rect x="12" y="8" width="4" height="4" fill="#DFFF00"/><rect x="8" y="16" width="8" height="4" fill="#DFFF00"/></svg>
-                </div>
-                <div>
-                  <p class="hash-name">genesis_subnet#0001</p>
-                  <p class="hash-status hash-status--active">Live · objectURI</p>
-                </div>
-              </article>
-
-              <article class="hash-card hash-card--sealed">
-                <div class="hash-preview" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" class="h-full w-full"><rect width="24" height="24" fill="#000"/><rect x="2" y="2" width="20" height="20" fill="none" stroke="#DFFF00" stroke-width="1"/><rect x="6" y="6" width="12" height="12" fill="#DFFF00" opacity="0.6"/></svg>
-                </div>
-                <div>
-                  <p class="hash-name">cipher_block#0042</p>
-                  <p class="hash-status hash-status--active">Sealed · frozen tokenURI</p>
-                </div>
-              </article>
-
-              <article class="hash-card hash-card--dormant">
-                <div class="hash-preview hash-preview--dim" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" class="h-full w-full"><rect width="24" height="24" fill="#000"/><rect x="10" y="10" width="4" height="4" fill="#DFFF00" opacity="0.25"/></svg>
-                </div>
-                <div>
-                  <p class="hash-name">null_hash#0000</p>
-                  <p class="hash-status text-white">Burned · below 1 UNIHASH</p>
-                </div>
-              </article>
-            </div>
+            <div id="torch-showcase-cards" class="mb-10 grid gap-4 md:grid-cols-3" aria-busy="true"></div>
 
             <div class="flex flex-wrap gap-6 font-mono text-xs uppercase tracking-widest">
-              <a href="gallery.html" class="link-fluor">View your Hashes →</a>
-              <a href="#" class="link-muted" target="_blank" rel="noopener noreferrer">OpenSea collection ↗</a>
+              <a href="whitepaper.html" class="link-fluor">Read the mechanics →</a>
+              <a href="#" id="hook-explorer-link" class="link-muted" target="_blank" rel="noopener noreferrer">Hook on Etherscan ↗</a>
             </div>
           </div>
         </section>
 
-        <!-- ═══ TOKENOMICS ═══ -->
         <section id="tokenomics" class="section-pad border-b border-ui" aria-labelledby="tokenomics-heading">
           <div class="mx-auto max-w-6xl px-6 md:px-10">
             <p class="section-label">Tokenomics</p>
 
             <div class="panel-box mb-12">
-              <p class="label-text mb-2">Total supply</p>
-              <p class="font-terminal text-5xl text-fluor md:text-6xl" id="token-total-supply">5,000</p>
-              <p class="mt-2 font-mono text-sm text-fluor"><span id="token-symbol">UNIHASH</span> · fixed forever</p>
+              <p class="label-text mb-2">Circulating supply</p>
+              <p class="font-terminal text-5xl text-fluor md:text-6xl" id="token-total-supply">137,000</p>
+              <p class="mt-2 font-mono text-sm text-fluor"><span id="token-symbol">UNITORCH</span> · deflationary ERC-20</p>
               <p class="body-text mt-6 max-w-2xl">
-                It launched fairly, with the whole supply paired into the pool against 1 ETH and nothing
-                held back for a team.
+                Genesis mint was <span id="token-initial-supply" class="text-fluor">137,000</span> UNITORCH.
+                <span id="token-burned" class="text-fluor">0</span> tokens have been burned so far — read live
+                values when <span class="text-fluor">VITE_LIVE_DATA=true</span>.
               </p>
             </div>
 
             <div class="grid gap-4 md:grid-cols-2">
               <div class="stat-cell">
-                <p class="stat-cell-label">1 Hash per</p>
-                <p class="stat-cell-value">1 UNIHASH</p>
+                <p class="stat-cell-label">Initial supply</p>
+                <p class="stat-cell-value">137,000</p>
               </div>
               <div class="stat-cell">
-                <p class="stat-cell-label">Max per buy</p>
-                <p class="stat-cell-value">5 UNIHASH</p>
+                <p class="stat-cell-label">Decimals</p>
+                <p class="stat-cell-value">18</p>
               </div>
               <div class="stat-cell">
-                <p class="stat-cell-label">Max per wallet</p>
-                <p class="stat-cell-value">100 UNIHASH</p>
+                <p class="stat-cell-label">Burn caller</p>
+                <p class="stat-cell-value text-base md:text-lg">v4 hook only</p>
               </div>
               <div class="stat-cell">
-                <p class="stat-cell-label">Swap fee → protocol</p>
-                <p class="stat-cell-value">4%</p>
+                <p class="stat-cell-label">Mechanism</p>
+                <p class="stat-cell-value text-base md:text-lg">swap → burn</p>
               </div>
             </div>
 
             <p class="body-text mt-8 max-w-3xl">
-              That 4% fee funds the protocol treasury and streams back to Hash holders by weight. A sealed
-              Hash can earn up to 2.5× more over time. The full mechanics live in the
+              No rebases, no hidden taxes in transfer — deflation is concentrated in pool volume through the
+              hook. Full parameters and contract addresses are in the
               <a href="whitepaper.html" class="link-fluor">whitepaper</a>.
             </p>
           </div>
         </section>
 
-        <!-- ═══ GALLERY ═══ -->
-        <section id="gallery" class="section-pad border-b border-ui" aria-labelledby="gallery-heading">
+        <section id="holder-rewards" class="section-pad border-b border-ui" aria-labelledby="holder-heading">
           <div class="mx-auto max-w-6xl px-6 md:px-10">
-            <p class="section-label">Gallery</p>
-            <h2 id="gallery-heading" class="section-title mb-6">On-chain SVG grid</h2>
-            <p class="body-text mb-10 max-w-2xl">
-              Every pixel is contract-rendered. Connect your wallet to see your live holdings, or explore
-              the full 3D collection.
+            <p class="section-label">Holder rewards</p>
+            <h2 id="holder-heading" class="section-title mb-6">Hold · claim · earn fees</h2>
+            <p class="body-text mb-12 max-w-3xl">
+              Buy and hold <span class="text-fluor">200 UNITORCH</span> to mint your on-chain Torch NFT — a
+              24×24 flame-pixel art piece from the gallery. Each Torch entitles you to a share of Uniswap v4
+              hook fees that accrue on every swap. No off-chain points: eligibility, mint, and claims are
+              enforced by contract.
             </p>
 
-            <div id="landing-gallery-grid" class="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12">
-              <div class="gallery-cell"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="2" y="2" width="6" height="6" fill="#DFFF00"/></svg></div>
-              <div class="gallery-cell"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="8" y="4" width="8" height="4" fill="#DFFF00"/></svg></div>
-              <div class="gallery-cell"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="4" y="8" width="4" height="8" fill="#DFFF00"/></svg></div>
-              <div class="gallery-cell"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="12" y="12" width="8" height="8" fill="#DFFF00"/></svg></div>
-              <div class="gallery-cell"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="0" y="16" width="24" height="4" fill="#DFFF00"/></svg></div>
-              <div class="gallery-cell"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="10" y="0" width="4" height="24" fill="#DFFF00"/></svg></div>
-              <div class="gallery-cell"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="6" y="6" width="12" height="12" fill="none" stroke="#DFFF00" stroke-width="1"/></svg></div>
-              <div class="gallery-cell"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="2" y="10" width="20" height="4" fill="#DFFF00"/></svg></div>
-              <div class="gallery-cell hidden sm:block"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="4" y="4" width="16" height="16" fill="#DFFF00" opacity="0.5"/></svg></div>
-              <div class="gallery-cell hidden sm:block"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="8" y="2" width="8" height="20" fill="#DFFF00"/></svg></div>
-              <div class="gallery-cell hidden md:block"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="0" y="0" width="12" height="12" fill="#DFFF00"/><rect x="12" y="12" width="12" height="12" fill="#DFFF00"/></svg></div>
-              <div class="gallery-cell hidden md:block"><svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#000"/><rect x="6" y="6" width="4" height="4" fill="#DFFF00"/><rect x="14" y="14" width="4" height="4" fill="#DFFF00"/></svg></div>
+            <div class="grid gap-8 md:grid-cols-3">
+              <article class="step-card holder-step-card">
+                <span class="step-number">01</span>
+                <h3 class="step-title">Hold 200 UNITORCH</h3>
+                <p class="step-body">
+                  Stack the minimum balance in your wallet. The threshold is checked on-chain at claim time —
+                  transfers behave like a normal ERC-20 until you mint.
+                </p>
+              </article>
+
+              <article class="step-card holder-step-card">
+                <span class="step-number">02</span>
+                <h3 class="step-title">Claim your Torch NFT</h3>
+                <p class="step-body">
+                  Mint a unique procedural flame pattern as an ERC-721. Your art lives in the
+                  <a href="gallery.html" class="link-fluor">Torch gallery</a> grid — same 24×24 pixel fire
+                  the brand is built on.
+                </p>
+              </article>
+
+              <article class="step-card holder-step-card">
+                <span class="step-number">03</span>
+                <h3 class="step-title">Earn hook fees</h3>
+                <p class="step-body">
+                  The v4 hook routes swap fees to Torch holders through an on-chain distributor. Rewards
+                  accrue continuously — claim ETH whenever your balance is ready.
+                </p>
+              </article>
             </div>
 
-            <a href="gallery.html" class="btn-secondary mt-10 inline-flex">Open 3D gallery ↗</a>
+            <div class="holder-flow-panel mt-12">
+              <p class="label-text mb-3">&gt; holder_loop</p>
+              <p class="font-terminal text-lg text-fluor md:text-xl">
+                swap volume → hook fees → Torch holders → claim()
+              </p>
+              <p class="body-text mt-4 max-w-2xl">
+                Deflation still burns supply on every trade. Holder rewards run in parallel — incentivizing
+                buy-and-hold while the pool keeps shrinking.
+              </p>
+              <div class="mt-8 flex flex-wrap gap-4">
+                <a href="#wallet" class="btn-primary">Connect &amp; check eligibility ↓</a>
+                <a href="gallery.html" class="btn-secondary">Browse Torch NFTs ↗</a>
+              </div>
+            </div>
           </div>
         </section>
 
-        <!-- ═══ WHITEPAPER ═══ -->
+        <section id="gallery" class="section-pad border-b border-ui" aria-labelledby="gallery-heading">
+          <div class="mx-auto max-w-6xl px-6 md:px-10">
+            <p class="section-label">Gallery</p>
+            <h2 id="gallery-heading" class="section-title mb-6">Torch NFT collection</h2>
+            <p class="body-text mb-10 max-w-2xl">
+              Fly through 120 Torch NFT cubes in open space — WebGPU lens-flare scene. Hold 200 UNITORCH to claim yours.
+            </p>
+
+            <div id="landing-gallery-grid" class="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12" aria-busy="true"></div>
+
+            <div class="mt-10 flex flex-wrap items-center gap-4 font-mono text-xs uppercase tracking-widest">
+              <a href="gallery.html" class="btn-secondary inline-flex">Open 3D gallery ↗</a>
+              <a href="#holder-rewards" class="link-fluor">Holder rewards →</a>
+            </div>
+          </div>
+        </section>
+
         <section id="whitepaper" class="section-pad border-b border-ui" aria-labelledby="whitepaper-heading">
           <div class="mx-auto max-w-6xl px-6 md:px-10">
             <p class="section-label">Whitepaper</p>
-            <h2 id="whitepaper-heading" class="section-title mb-6">unihash_architecture</h2>
+            <h2 id="whitepaper-heading" class="section-title mb-6">unitorch_architecture</h2>
 
             <div class="panel-box">
               <p class="label-text mb-2">// protocol_manifest</p>
-              <p class="body-text mb-6">EVM-Native SVG Renderer &amp; Base64 Core</p>
+              <p class="body-text mb-6">ERC-20 + v4 hook burn + Torch NFT holder fees</p>
 
               <ul class="mb-8 space-y-3 font-mono text-sm text-white">
                 <li class="flex items-start gap-3">
                   <span class="bullet-square" aria-hidden="true"></span>
-                  <span>24×24 SVG art + base64 JSON embedded in contract bytecode</span>
+                  <span>Hold 200 UNITORCH → claim procedural Torch NFT (24×24 flame-pixel art)</span>
                 </li>
                 <li class="flex items-start gap-3">
                   <span class="bullet-square" aria-hidden="true"></span>
-                  <span>Live objectURI / frozen tokenURI state machine</span>
+                  <span>Uniswap v4 hook burns supply and routes fees to Torch holders</span>
                 </li>
                 <li class="flex items-start gap-3">
                   <span class="bullet-square" aria-hidden="true"></span>
-                  <span>Spawn block metadata written at mint time</span>
+                  <span>137,000 UNITORCH genesis supply — INITIAL_SUPPLY immutable on-chain</span>
                 </li>
                 <li class="flex items-start gap-3">
                   <span class="bullet-square" aria-hidden="true"></span>
-                  <span>Whole-token mint: 1 UNIHASH = 1 living Hash NFT · below 1 burns</span>
+                  <span>burn(amount) callable only by the wired v4 hook (OnlyHook)</span>
                 </li>
                 <li class="flex items-start gap-3">
                   <span class="bullet-square" aria-hidden="true"></span>
-                  <span>Zero off-chain dependencies — verifiable on Etherscan</span>
+                  <span>setHook once — HookSet event, HookAlreadySet guard</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="bullet-square" aria-hidden="true"></span>
+                  <span>Standard ERC-20 transfer / approve — deflation on pool swaps only</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="bullet-square" aria-hidden="true"></span>
+                  <span>Verified source on Etherscan — no off-chain dependencies</span>
                 </li>
               </ul>
 
@@ -355,38 +369,58 @@
           </div>
         </section>
 
-        <!-- ═══ WALLET ═══ -->
         <section id="wallet" class="section-pad" aria-labelledby="wallet-heading">
           <div class="mx-auto max-w-6xl px-6 md:px-10">
             <p class="section-label">Your wallet</p>
-            <h2 id="wallet-heading" class="section-title mb-6">See your Hashes and claim your rewards</h2>
+            <h2 id="wallet-heading" class="section-title mb-6">Hold, claim &amp; collect fees</h2>
             <p class="body-text mb-10 max-w-2xl">
-              Connect a wallet to read your live holdings, and head to the gallery to see every Hash you own.
+              Connect to track your path to 200 UNITORCH, mint your Torch NFT, and claim accrued hook fees.
             </p>
 
             <div class="mx-auto max-w-xl">
               <div class="wallet-panel">
                 <div class="wallet-panel-brand mb-6">
                   <img src="/logo.svg" alt="" width="24" height="24" class="site-logo-mark" aria-hidden="true" />
-                  <p class="label-text">unihash · wallet</p>
+                  <p class="label-text">unitorch · holder terminal</p>
                 </div>
 
-                <p id="wallet-terminal-line" class="mb-8 font-mono text-sm text-white">
+                <p id="wallet-terminal-line" class="mb-6 font-mono text-sm text-white">
                   &gt; awaiting connection…
                 </p>
 
+                <div class="holder-progress-block mb-8" aria-labelledby="holder-progress-label">
+                  <div class="holder-progress-head">
+                    <p id="holder-progress-label" class="label-text">Hold progress · 200 UNITORCH</p>
+                    <p id="stat-hold-progress-text" class="font-mono text-xs text-fluor">0 / 200</p>
+                  </div>
+                  <div class="holder-progress-track" aria-hidden="true">
+                    <div id="stat-hold-progress-bar" class="holder-progress-fill" style="width: 0%"></div>
+                  </div>
+                  <p id="holder-eligibility-copy" class="holder-eligibility-copy">
+                    Hold 200 UNITORCH to unlock Torch NFT minting.
+                  </p>
+                </div>
+
                 <dl class="wallet-stats">
                   <div class="wallet-stat-row">
-                    <dt>UNIHASH balance</dt>
+                    <dt>UNITORCH balance</dt>
                     <dd id="stat-balance">·</dd>
                   </div>
                   <div class="wallet-stat-row">
-                    <dt>Hashes</dt>
-                    <dd id="stat-owned">·</dd>
+                    <dt>% of circulating</dt>
+                    <dd id="stat-share">·</dd>
                   </div>
                   <div class="wallet-stat-row">
-                    <dt>Claimable rewards</dt>
-                    <dd id="stat-claimable">·</dd>
+                    <dt>Torch NFT</dt>
+                    <dd id="stat-torch-nft">·</dd>
+                  </div>
+                  <div class="wallet-stat-row">
+                    <dt>Claimable fees</dt>
+                    <dd id="stat-claimable-fees">·</dd>
+                  </div>
+                  <div class="wallet-stat-row">
+                    <dt>Total burned</dt>
+                    <dd id="stat-burned-wallet">·</dd>
                   </div>
                   <div class="wallet-stat-row">
                     <dt>Status</dt>
@@ -415,7 +449,13 @@
                       </button>
                     </div>
                   </div>
-                  <button id="btn-claim" type="button" class="btn-secondary" disabled>Claim rewards</button>
+                  <button type="button" id="btn-claim-torch" class="btn-secondary" disabled>
+                    Claim Torch NFT
+                  </button>
+                  <button type="button" id="btn-claim-fees" class="btn-secondary" disabled>
+                    Claim fees
+                  </button>
+                  <a href="#" class="btn-secondary buy-hash-link">Buy on Uniswap ↗</a>
                 </div>
 
                 <p class="mt-6 border-t border-ui pt-4 font-mono text-xs" aria-live="polite">
@@ -429,50 +469,47 @@
 
       </main>
 
-      <!-- ═══ FOOTER ═══ -->
       <footer class="site-footer-glass border-t border-ui px-6 py-12 md:px-10">
         <div class="mx-auto max-w-6xl">
           <div class="mb-8 flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
             <div>
               <a href="#" class="site-logo mb-3">
                 <img src="/logo.svg" alt="" width="32" height="32" class="site-logo-mark" aria-hidden="true" />
-                <span class="site-logo-text text-2xl">uniHash</span>
+                <span class="site-logo-text text-2xl">Uni<span class="text-fluor">Torch</span></span>
               </a>
               <p class="max-w-sm font-mono text-xs leading-relaxed text-white">
-                A coin you hold to spawn living on-chain SVG art — 1 whole UNIHASH mints 1 Hash NFT. Drop below
-                1 and it burns. Fully verifiable on Ethereum. Nothing here is financial advice.
+                A deflationary ERC-20 on Ethereum — every Uniswap v4 swap burns UNITORCH through an on-chain
+                hook. Fully verifiable. Not financial advice.
               </p>
             </div>
 
             <nav class="flex flex-wrap gap-x-8 gap-y-3 font-mono text-xs uppercase tracking-widest" aria-label="Footer navigation">
               <a href="whitepaper.html" class="link-muted">Whitepaper</a>
               <a href="gallery.html" class="link-muted">Gallery</a>
-              <a href="#" class="link-muted" target="_blank" rel="noopener noreferrer">OpenSea</a>
-              <a href="https://x.com/Unihash_" class="link-muted" target="_blank" rel="noopener noreferrer">X ↗</a>
+              <a href="https://x.com/UniTorch_" class="link-muted" target="_blank" rel="noopener noreferrer">X ↗</a>
             </nav>
           </div>
 
           <p class="border-t border-ui pt-6 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-fluor">
-            © 2026 UniTorch · on-chain &amp; verifiable · UNIHASH
+            © 2026 UniTorch · on-chain &amp; verifiable · UNITORCH
           </p>
         </div>
       </footer>
 
     </div>
 
-    <!-- ═══ WALLET MODAL ═══ -->
     <div id="wallet-modal" class="wallet-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wallet-modal-title">
       <div id="wallet-modal-backdrop" class="wallet-modal-backdrop" aria-hidden="true"></div>
       <div class="wallet-modal-panel">
         <div class="wallet-modal-header">
           <div class="wallet-modal-brand">
             <img src="/logo.svg" alt="" width="24" height="24" class="site-logo-mark" aria-hidden="true" />
-            <p class="label-text">unihash · connect</p>
+            <p class="label-text">unitorch · connect</p>
           </div>
           <button id="wallet-modal-close" type="button" class="wallet-modal-close" aria-label="Close">×</button>
         </div>
         <h2 id="wallet-modal-title" class="wallet-modal-title">Choose your wallet</h2>
-        <p class="wallet-modal-subtitle">Select a provider to read your UNIHASH balance and claim rewards.</p>
+        <p class="wallet-modal-subtitle">Select a provider to read your UNITORCH balance on Ethereum.</p>
         <ul id="wallet-options" class="wallet-options" aria-label="Wallet providers"></ul>
       </div>
     </div>

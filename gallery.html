@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="UniTorch Gallery — explore 100% on-chain 24×24 Hash SVGs in an interactive 3D grid."
+      content="UniTorch Gallery — Torch NFT collection. Hold 200 UNITORCH, claim flame-pixel art, earn Uniswap v4 hook fees."
     />
-    <title>UniTorch Gallery · UNIHASH</title>
+    <title>UniTorch Gallery · UNITORCH</title>
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
   </head>
 
@@ -20,7 +20,8 @@
       </a>
       <nav class="gallery-header-nav" aria-label="Gallery navigation">
         <a href="/">Home</a>
-        <a href="/#wallet">Wallet</a>
+        <a href="/#holder-rewards">Holder rewards</a>
+        <a href="/#wallet">Claim NFT</a>
         <a href="/whitepaper.html">Whitepaper</a>
         <a
           href="https://x.com/UniTorch_"
@@ -40,7 +41,7 @@
       <div class="ca-strip-glow" aria-hidden="true"></div>
       <div class="ca-strip-inner">
         <div class="ca-strip-meta">
-          <p class="ca-strip-label">&gt; contract_address · UNIHASH</p>
+          <p class="ca-strip-label">&gt; contract_address · UNITORCH</p>
           <code class="ca-strip-address" id="ca-address-display" title="UniTorch token contract"></code>
         </div>
         <div class="ca-strip-actions">
@@ -54,46 +55,58 @@
     </div>
 
     <div class="gallery-intro">
-      <p class="gallery-intro-label">Gallery</p>
-      <h1 class="gallery-intro-title">On-chain SVG grid</h1>
+      <p class="gallery-intro-label">Gallery · Torch NFT</p>
+      <h1 class="gallery-intro-title">Hold 200 · claim · earn fees</h1>
       <p class="gallery-intro-copy" id="gallery-intro-copy">
-        120 preview Hashes rendered as living 24×24 SVG art. Drag to explore, then switch layouts below.
+        Fly through 120 Torch NFT cubes in open space — one flame-pixel artwork per cube.
       </p>
       <p class="gallery-intro-note" id="gallery-intro-note">
-        Preview mode — live on-chain data unlocks after launch.
+        WASD move · R/F or Q/E up-down · mouse look · click a cube · 6 faces: NFT · on-chain · logo
       </p>
+      <a href="/#wallet" class="gallery-holder-cta">Connect wallet &amp; claim Torch ↗</a>
     </div>
 
     <div class="gallery-showcase" aria-live="polite">
-      <p class="gallery-showcase-label" id="gallery-showcase-label">Preview pattern</p>
+      <p class="gallery-showcase-label" id="gallery-showcase-label">Torch NFT preview</p>
       <div class="gallery-showcase-frame" id="gallery-showcase-frame">
-        <svg id="gallery-showcase-svg" viewBox="0 0 24 24" role="img" aria-label="Animated Hash pattern preview"></svg>
+        <svg id="gallery-showcase-svg" viewBox="0 0 24 24" role="img" aria-label="Animated torch pattern preview"></svg>
       </div>
 
       <dl class="gallery-showcase-details" id="gallery-showcase-details">
         <div class="gallery-showcase-detail">
-          <dt>Hash ID</dt>
+          <dt>Torch ID</dt>
           <dd id="gallery-showcase-hashid">#0000</dd>
         </div>
         <div class="gallery-showcase-detail">
-          <dt>Owner wallet</dt>
+          <dt>Holder</dt>
           <dd id="gallery-showcase-owner">0x0000…0000</dd>
         </div>
         <div class="gallery-showcase-detail">
-          <dt>Daily yield</dt>
-          <dd id="gallery-showcase-yield">~0.000 UNIHASH / day</dd>
+          <dt>Hook fees accrued</dt>
+          <dd id="gallery-showcase-yield">0.0000 ETH fees</dd>
         </div>
       </dl>
     </div>
 
-    <div id="gallery-container" aria-label="Interactive Hash gallery"></div>
+    <div id="gallery-fire-canvas" class="gallery-fire-canvas gallery-fire-canvas--static" aria-hidden="true"></div>
+    <div class="gallery-fire-overlay" aria-hidden="true"></div>
 
-    <div id="gallery-menu" aria-label="Gallery layouts">
-      <button id="layout-table" type="button">Table</button>
-      <button id="layout-sphere" type="button">Sphere</button>
-      <button id="layout-helix" type="button">Helix</button>
-      <button id="layout-grid" type="button">Grid</button>
+    <div id="gallery-container" aria-label="Interactive Torch NFT cube gallery">
+      <div id="gallery-loader" class="gallery-loader" aria-live="polite" aria-busy="true">
+        <p class="gallery-loader-title">Loading Torch gallery</p>
+        <p id="gallery-loader-text" class="gallery-loader-text">Initialising WebGPU scene…</p>
+        <div class="gallery-loader-track" aria-hidden="true">
+          <div id="gallery-loader-bar" class="gallery-loader-bar"></div>
+        </div>
+      </div>
     </div>
+
+    <p class="gallery-flight-hint" aria-hidden="true">
+      <span>WASD</span><span>move</span>
+      <span>R/F</span><span>up/down</span>
+      <span>mouse</span><span>look</span>
+      <span>click</span><span>inspect NFT</span>
+    </p>
 
     <script type="module" src="/src/gallery-main.js"></script>
   </body>

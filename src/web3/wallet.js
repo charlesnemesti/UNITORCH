@@ -7,7 +7,7 @@ import {
   onActiveProviderChange,
   setActiveProvider,
 } from './provider.js';
-import { readWalletBalances } from './reads.js';
+import { readHolderStatus } from './holder.js';
 import {
   getProviderByRdns,
   getRememberedWalletRdns,
@@ -15,7 +15,6 @@ import {
   clearRememberedWallet,
   startWalletDiscovery,
 } from './wallets.js';
-import { claimRewards as claimOnChain } from './writes.js';
 
 /** @type {`0x${string}` | null} */
 let connectedAddress = null;
@@ -56,7 +55,7 @@ onActiveProviderChange(bindProviderListeners);
 /**
  * @param {import('viem').EIP1193Provider} [provider]
  * @param {string} [rdns]
- * @returns {Promise<{ address: `0x${string}`, balances: import('./reads.js').WalletBalances }>}
+ * @returns {Promise<{ address: `0x${string}`, balances: import('./holder.js').HolderStatus }>}
  */
 export async function connect(provider, rdns) {
   if (provider) {
@@ -78,12 +77,12 @@ export async function connect(provider, rdns) {
   connectedAddress = address;
   bindProviderListeners(getActiveProvider());
 
-  const balances = await readWalletBalances(address);
+  const balances = await readHolderStatus(address);
   return { address, balances };
 }
 
 /**
- * @returns {Promise<{ address: `0x${string}`, balances: import('./reads.js').WalletBalances } | null>}
+ * @returns {Promise<{ address: `0x${string}`, balances: import('./holder.js').HolderStatus } | null>}
  */
 export async function tryAutoConnect() {
   startWalletDiscovery();
@@ -108,7 +107,7 @@ export async function tryAutoConnect() {
     connectedAddress = address;
     bindProviderListeners(getActiveProvider());
 
-    const balances = await readWalletBalances(address);
+    const balances = await readHolderStatus(address);
     return { address, balances };
   } catch {
     return null;
@@ -133,23 +132,10 @@ export function disconnect() {
  */
 export async function refresh(address = connectedAddress) {
   if (!address) {
-    return {
-      hashBalance: 0,
-      hashesOwned: 0,
-      claimableEth: 0,
-      contractsReady: contractsConfigured(),
-    };
+    return readHolderStatus('0x0000000000000000000000000000000000000001');
   }
 
-  return readWalletBalances(address);
-}
-
-/**
- * @param {`0x${string}`} address
- */
-export async function claim(address = connectedAddress) {
-  if (!address) throw new Error('Wallet not connected');
-  return claimOnChain(address);
+  return readHolderStatus(address);
 }
 
 async function ensureCorrectChain() {
