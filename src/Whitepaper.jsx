@@ -218,7 +218,7 @@ export default function Whitepaper() {
       <div className="flex min-h-screen bg-zinc-950 font-mono text-zinc-300">
         <aside className="sticky top-0 hidden h-screen w-64 shrink-0 overflow-y-auto border-r border-zinc-800 p-6 lg:block">
           <div className="mb-6 flex items-center gap-2">
-            <img src="/logo.svg" alt="" width="24" height="24" className="site-logo-mark" aria-hidden="true" />
+            <img src="/logo.png" alt="" width="24" height="24" className="site-logo-mark" aria-hidden="true" />
             <p className="text-xs uppercase tracking-[0.28em] text-fluor">Docs</p>
           </div>
           <nav className="flex flex-col gap-1" aria-label="Section navigation">

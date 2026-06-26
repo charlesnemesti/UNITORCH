@@ -55,6 +55,13 @@ body {
   text-decoration: none;
 }
 
+.gallery-header-brand img,
+.gallery-header-brand .site-logo-mark {
+  flex-shrink: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
 .gallery-header-title {
   margin: 0;
   font-family: VT323, monospace;

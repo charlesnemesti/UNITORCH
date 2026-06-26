@@ -30,6 +30,8 @@
 
 .site-logo-mark {
   flex-shrink: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .site-logo-text {

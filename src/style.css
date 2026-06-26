@@ -93,6 +93,8 @@
 
   .site-logo-mark {
     @apply shrink-0;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
   }
 
   .site-logo-text {

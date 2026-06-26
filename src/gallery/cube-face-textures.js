@@ -21,7 +21,7 @@ export const FACE_NFT = [0, 1];
 export const FACE_ONCHAIN = [2, 3];
 export const FACE_LOGO = [4, 5];
 
-const LOGO_URL = '/textures/torch-logo.png';
+const LOGO_URL = '/logo.png';
 const IMAGE_LOAD_TIMEOUT_MS = 12_000;
 
 /**

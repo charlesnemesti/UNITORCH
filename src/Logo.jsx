@@ -1,8 +1,10 @@
+export const LOGO_URL = '/logo.png';
+
 export function Logo({ size = 36, showWordmark = true, className = '' }) {
   return (
     <span className={`site-logo ${className}`.trim()}>
       <img
-        src="/logo.svg"
+        src={LOGO_URL}
         alt=""
         width={size}
         height={size}
