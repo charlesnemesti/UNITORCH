@@ -682,6 +682,19 @@
     color: var(--void);
   }
 
+  .ca-strip.is-tba .ca-strip-address {
+    letter-spacing: 0.06em;
+    font-size: 0.72rem;
+  }
+
+  .ca-strip-link.is-disabled,
+  .ca-copy-btn.is-disabled,
+  .ca-copy-btn:disabled {
+    opacity: 0.38;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
   @keyframes ca-strip-sweep {
     0%,
     100% {

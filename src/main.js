@@ -21,7 +21,6 @@ import {
   claimTorchNft,
   claimHookFees,
   UNISWAP_BUY_URL,
-  ETHERSCAN_HOOK_URL,
 } from './web3/index.js';
 import { getHashSvgCatalog } from './hash-svgs.js';
 import { HOLDER_THRESHOLD, HOLDER_THRESHOLD_LABEL } from './config/holder.js';
@@ -472,7 +471,9 @@ function initBuyLinks() {
 
   const hookLink = $('hook-explorer-link');
   if (hookLink) {
-    hookLink.href = ETHERSCAN_HOOK_URL;
+    hookLink.href = '#';
+    hookLink.classList.add('is-disabled');
+    hookLink.setAttribute('aria-disabled', 'true');
   }
 }
 

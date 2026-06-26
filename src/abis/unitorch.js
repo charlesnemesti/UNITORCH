@@ -1,4 +1,4 @@
-/** UniTorch ERC-20 + burn hook — verified ABI at 0x82da588… on Ethereum mainnet. */
+/** UniTorch ERC-20 + burn hook ABI — wire when mainnet contract is live. */
 export const unitorchAbi = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   { inputs: [{ internalType: 'address', name: 'spender', type: 'address' }, { internalType: 'uint256', name: 'allowance', type: 'uint256' }, { internalType: 'uint256', name: 'needed', type: 'uint256' }], name: 'ERC20InsufficientAllowance', type: 'error' },

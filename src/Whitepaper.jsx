@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Logo } from './Logo.jsx';
 import {
-  UNITORCH_CA,
-  UNITORCH_HOOK_CA,
-  ETHERSCAN_TOKEN_URL,
-  ETHERSCAN_HOOK_URL,
+  UNITORCH_CA_DISPLAY,
+  UNITORCH_HOOK_CA_DISPLAY,
+  UNITORCH_TWITTER_URL,
   UNISWAP_BUY_URL,
   UNITORCH_INITIAL_SUPPLY,
 } from './config/deployed.js';
@@ -164,7 +163,7 @@ export default function Whitepaper() {
             </a>
             <div className="flex shrink-0 items-center gap-3">
               <a
-                href="https://x.com/UniTorch_"
+                href={UNITORCH_TWITTER_URL}
                 className="btn-twitter"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -202,10 +201,9 @@ export default function Whitepaper() {
             <div className="ca-strip-actions flex shrink-0 items-center gap-2">
               <a
                 id="ca-explorer-link"
-                href={ETHERSCAN_TOKEN_URL}
-                className="ca-strip-link"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                className="ca-strip-link is-disabled"
+                aria-disabled="true"
               >
                 Etherscan ↗
               </a>
@@ -282,7 +280,8 @@ export default function Whitepaper() {
 
             <DocCard id="signal-001" badge="// 01 · the token" title="The token">
               <p className="text-sm leading-relaxed text-zinc-400">
-                The verified token contract at <Accent>{UNITORCH_CA}</Accent> is a minimal
+                The token contract will be published at launch — currently{' '}
+                <Accent>{UNITORCH_CA_DISPLAY}</Accent>. It is a minimal
                 OpenZeppelin-style ERC-20 with two extensions: a public <Accent>INITIAL_SUPPLY</Accent>{' '}
                 constant and a hook-gated <Accent>burn(uint256)</Accent> function. Transfers, approvals, and
                 balances behave exactly like any other ERC-20 — no rebases, no hidden transfer taxes.
@@ -324,7 +323,7 @@ export default function Whitepaper() {
               </p>
               <ItemGrid
                 items={[
-                  `token hook() → ${UNITORCH_HOOK_CA}`,
+                  `token hook() → ${UNITORCH_HOOK_CA_DISPLAY}`,
                   'setHook guarded — single assignment only',
                   'hook contract verified separately on Etherscan',
                   'swap volume → hook → burn() on token',
@@ -388,8 +387,8 @@ export default function Whitepaper() {
               </p>
               <ItemGrid
                 items={[
-                  `UniTorch token (ERC-20) · ${UNITORCH_CA}`,
-                  `Burn hook · ${UNITORCH_HOOK_CA}`,
+                  `UniTorch token (ERC-20) · ${UNITORCH_CA_DISPLAY}`,
+                  `Burn hook · ${UNITORCH_HOOK_CA_DISPLAY}`,
                   'Torch NFT registry · VITE_TORCH_NFT (deploy & wire in .env)',
                   'Fee distributor · VITE_REWARD_DISTRIBUTOR (deploy & wire in .env)',
                 ]}
@@ -399,21 +398,20 @@ export default function Whitepaper() {
             <DocCard id="signal-008" badge="// 08 · parameters" title="Parameters">
               <SpecGrid
                 specs={[
-                  { label: 'Token', value: UNITORCH_CA },
-                  { label: 'Hook', value: UNITORCH_HOOK_CA },
+                  { label: 'Token', value: UNITORCH_CA_DISPLAY },
+                  { label: 'Hook', value: UNITORCH_HOOK_CA_DISPLAY },
                   { label: 'Genesis', value: '137,000 UNITORCH' },
                 ]}
               />
-              <CodeBlock>{`UniTorch (ERC-20)     ${UNITORCH_CA}
-Burn hook             ${UNITORCH_HOOK_CA}
-Etherscan (token)     ${ETHERSCAN_TOKEN_URL}
-Etherscan (hook)      ${ETHERSCAN_HOOK_URL}`}</CodeBlock>
+              <CodeBlock>{`UniTorch (ERC-20)     ${UNITORCH_CA_DISPLAY}
+Burn hook             ${UNITORCH_HOOK_CA_DISPLAY}
+Uniswap               ${UNISWAP_BUY_URL}`}</CodeBlock>
               <p className="mt-6 text-sm leading-relaxed text-zinc-400">
                 Buy UNITORCH, hold {HOLDER_THRESHOLD_LABEL}, claim your Torch NFT, and earn hook fees while{' '}
                 <Accent>totalSupply</Accent> falls on every swap.
               </p>
               <p className="mt-6 border-t border-zinc-800 pt-6 text-xs leading-relaxed text-zinc-500">
-                Docs aligned to verified contract source at {UNITORCH_CA}. Technical specification — not
+                Pre-launch technical specification — not
                 financial or legal advice.
               </p>
               <div className="mt-6 flex flex-wrap gap-4">

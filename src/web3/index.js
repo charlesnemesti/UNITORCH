@@ -20,10 +20,10 @@ export {
 } from './protocol.js';
 export {
   UNISWAP_BUY_URL,
-  ETHERSCAN_TOKEN_URL,
-  ETHERSCAN_HOOK_URL,
-  UNITORCH_CA,
-  UNITORCH_HOOK_CA,
+  UNITORCH_CA_DISPLAY,
+  UNITORCH_HOOK_CA_DISPLAY,
+  UNITORCH_TWITTER_URL,
+  IS_CA_LIVE,
   UNITORCH_INITIAL_SUPPLY,
 } from '../config/deployed.js';
 export { getPublicClient, hasWalletProvider } from './provider.js';

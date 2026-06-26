@@ -1,4 +1,5 @@
-import { ETHERSCAN_TOKEN_URL, UNITORCH_CA } from './config/deployed.js';
+import { UNITORCH_CA_DISPLAY, UNITORCH_TWITTER_URL, IS_CA_LIVE } from './config/deployed.js';
+import { CONTRACTS, isDeployed } from './config/contracts.js';
 
 const SCRAMBLE_GLYPHS = '01█#?_X';
 
@@ -40,6 +41,15 @@ function revealTerminalText(element, target) {
   requestAnimationFrame(tick);
 }
 
+function getTokenCaLabel() {
+  if (!IS_CA_LIVE || !isDeployed(CONTRACTS.unitorch)) return UNITORCH_CA_DISPLAY;
+  return CONTRACTS.unitorch;
+}
+
+function isCaStripLive() {
+  return IS_CA_LIVE && isDeployed(CONTRACTS.unitorch);
+}
+
 export function initCaStrip() {
   const strip = document.getElementById('ca-strip');
   const display = document.getElementById('ca-address-display');
@@ -50,16 +60,34 @@ export function initCaStrip() {
   if (strip.dataset.initialized === 'true') return;
   strip.dataset.initialized = 'true';
 
-  display.textContent = '0x' + '█'.repeat(40);
-  revealTerminalText(display, UNITORCH_CA);
+  const live = isCaStripLive();
+  const label = getTokenCaLabel();
+
+  if (live) {
+    display.textContent = '0x' + '█'.repeat(40);
+  } else {
+    display.textContent = '█'.repeat(label.length);
+    strip.classList.add('is-tba');
+  }
+
+  revealTerminalText(display, label);
 
   if (explorerLink) {
-    explorerLink.href = ETHERSCAN_TOKEN_URL;
+    if (live) {
+      explorerLink.href = `https://etherscan.io/address/${CONTRACTS.unitorch}`;
+      explorerLink.removeAttribute('aria-disabled');
+    } else {
+      explorerLink.href = '#';
+      explorerLink.setAttribute('aria-disabled', 'true');
+      explorerLink.classList.add('is-disabled');
+    }
   }
 
   copyBtn?.addEventListener('click', async () => {
+    if (!live) return;
+
     try {
-      await navigator.clipboard.writeText(UNITORCH_CA);
+      await navigator.clipboard.writeText(CONTRACTS.unitorch);
       copyBtn.textContent = 'Copied ✓';
       copyBtn.classList.add('is-copied');
       strip.classList.add('is-copied');
@@ -76,4 +104,11 @@ export function initCaStrip() {
       }, 2000);
     }
   });
+
+  if (copyBtn && !live) {
+    copyBtn.disabled = true;
+    copyBtn.classList.add('is-disabled');
+  }
 }
+
+export { UNITORCH_TWITTER_URL };
